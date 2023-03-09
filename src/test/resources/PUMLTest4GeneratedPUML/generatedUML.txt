@@ -1,0 +1,16 @@
+@startuml
+class Dependency1{
++{method} Dependency1():void
+}
+class Dependency2{
++{method} Dependency2():void
+}
+class DependsOn{
++{method} DependsOn():void
+-{method} dependsOn(Dependency1):void
+-{method} dependsOn2():Dependency2
+}
+DependsOn .> Dependency1
+DependsOn .> Dependency2
+@enduml
+

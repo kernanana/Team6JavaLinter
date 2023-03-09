@@ -1,0 +1,24 @@
+Some Features we could do:
+testingsieosadf
+1. Violations of Design Principles
+	a. Encapsulate what varies
+	b. Composition over inhertitance
+	c. Program to interfaces, not implementations
+	d. Strive for loose coupling
+	e. Open Close Principle
+	f. Principle of least knowledge
+2. Poorly written design patterns
+	a. Strategy
+		-target field is concrete not abstract
+	b. Observer Pattern
+		-observes concrete classes not abstract/interface
+	c. Decorator Pattern
+		-forgot to change existing method
+	d. Template Method
+		-forgot final access mod
+	e. Adapter
+		-Adapter has to inherit target and have adaptee as field
+	f. Facade
+		-doesn't have subsystem
+3. Missing implementations of abstract types
+		

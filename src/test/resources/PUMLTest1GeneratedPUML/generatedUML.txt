@@ -1,0 +1,9 @@
+@startuml
+class PublicConcreteClassWithPublicMethods{
++{method} PublicConcreteClassWithPublicMethods():void
++{method} method1():void
++{method} method2():boolean
++{method} method3():String
+}
+@enduml
+
