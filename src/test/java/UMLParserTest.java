@@ -14,8 +14,8 @@ public class UMLParserTest {
         PlantClassUMLParser parserUndertest = new PlantClassUMLParser(sourceStringReaderAdapter, new PrintWriterUMLTextWriter());
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        ArrayList<ClassAdapter> classAdapters = (ArrayList<ClassAdapter>) projectDataManager.generateClassAdapters("src/test/resources/PUMLDummyData/PublicConcreteClassWithPublicMethods");
-        String result = parserUndertest.parseUML(classAdapters, "src/test/resources/PUMLTest1GeneratedPUML"); // Can see output here if u want, can delete existing output and re-run too if u dont trusnt me
+        ArrayList<ClassAdapter> classAdapters = (ArrayList<ClassAdapter>) projectDataManager.generateClassAdapters("./src/test/resources/PUMLDummyData/PublicConcreteClassWithPublicMethods");
+        String result = parserUndertest.parseUML(classAdapters, "./src/test/resources/PUMLTest1GeneratedPUML"); // Can see output here if u want, can delete existing output and re-run too if u dont trusnt me
         Assertions.assertEquals(
                 "@startuml\n" +
                 "class PublicConcreteClassWithPublicMethods{\n" +
@@ -33,8 +33,8 @@ public class UMLParserTest {
         PlantClassUMLParser parserUndertest = new PlantClassUMLParser(sourceStringReaderAdapter, new PrintWriterUMLTextWriter());
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        ArrayList<ClassAdapter> classAdapters = (ArrayList<ClassAdapter>) projectDataManager.generateClassAdapters("src/test/resources/PUMLDummyData/AbstractMethodsAndClassAndPrivateMethodsAndExtension");
-        String result = parserUndertest.parseUML(classAdapters, "src/test/resources/PUMLTest2GeneratedPUML"); // Can see output here if u want, can delete existing output and re-run too if u dont trusnt me
+        ArrayList<ClassAdapter> classAdapters = (ArrayList<ClassAdapter>) projectDataManager.generateClassAdapters("./src/test/resources/PUMLDummyData/AbstractMethodsAndClassAndPrivateMethodsAndExtension");
+        String result = parserUndertest.parseUML(classAdapters, "./src/test/resources/PUMLTest2GeneratedPUML"); // Can see output here if u want, can delete existing output and re-run too if u dont trusnt me
         Assertions.assertEquals(
                 "@startuml\n" +
                         "abstract AbstractClassPrivateAbstractMethodsWithAbstractExtender{\n" +
@@ -57,8 +57,8 @@ public class UMLParserTest {
         PlantClassUMLParser parserUndertest = new PlantClassUMLParser(sourceStringReaderAdapter, new PrintWriterUMLTextWriter());
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        ArrayList<ClassAdapter> classAdapters = (ArrayList<ClassAdapter>) projectDataManager.generateClassAdapters("src/test/resources/PUMLDummyData/EnumHasAInterfaceAndFields");
-        String result = parserUndertest.parseUML(classAdapters, "src/test/resources/PUMLTest3GeneratedPUML"); // Can see output here if u want, can delete existing output and re-run too if u dont trusnt me
+        ArrayList<ClassAdapter> classAdapters = (ArrayList<ClassAdapter>) projectDataManager.generateClassAdapters("./src/test/resources/PUMLDummyData/EnumHasAInterfaceAndFields");
+        String result = parserUndertest.parseUML(classAdapters, "./src/test/resources/PUMLTest3GeneratedPUML"); // Can see output here if u want, can delete existing output and re-run too if u dont trusnt me
         Assertions.assertEquals(
                 "@startuml\n" +
                         "Enum IAmAnEnum{\n" +
@@ -81,8 +81,8 @@ public class UMLParserTest {
         PlantClassUMLParser parserUndertest = new PlantClassUMLParser(sourceStringReaderAdapter, new PrintWriterUMLTextWriter());
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        ArrayList<ClassAdapter> classAdapters = (ArrayList<ClassAdapter>) projectDataManager.generateClassAdapters("src/test/resources/PUMLDummyData/PUMLDependant");
-        String result = parserUndertest.parseUML(classAdapters, "src/test/resources/PUMLTest4GeneratedPUML"); // Can see output here if u want, can delete existing output and re-run too if u dont trusnt me
+        ArrayList<ClassAdapter> classAdapters = (ArrayList<ClassAdapter>) projectDataManager.generateClassAdapters("./src/test/resources/PUMLDummyData/PUMLDependant");
+        String result = parserUndertest.parseUML(classAdapters, "./src/test/resources/PUMLTest4GeneratedPUML"); // Can see output here if u want, can delete existing output and re-run too if u dont trusnt me
         Assertions.assertEquals(
                 "@startuml\n" +
                         "class Dependency1{\n" +

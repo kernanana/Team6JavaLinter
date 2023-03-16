@@ -16,7 +16,7 @@ public class NoFinalizerTests {
     @Test
     public void testDetectsViolation() {
         ProjectDataManager manager = new ASMProjectDataManager(new DefaultDataLoader());
-        ClassAdapter adapter = manager.createClassAdapter("src/test/resources/FinalizerDummyData/HasFinalizer.class");
+        ClassAdapter adapter = manager.createClassAdapter("./src/test/resources/FinalizerDummyData/HasFinalizer.class");
         List<ClassAdapter> adapterList = new ArrayList<>();
         adapterList.add(adapter);
         Check check = new NoFinalizerCheck();
@@ -30,7 +30,7 @@ public class NoFinalizerTests {
     @Test
     public void testDetectsNoViolation() {
         ProjectDataManager manager = new ASMProjectDataManager(new DefaultDataLoader());
-        ClassAdapter adapter = manager.createClassAdapter("src/test/resources/FinalizerDummyData/HasFinalizerParams.class");
+        ClassAdapter adapter = manager.createClassAdapter("./src/test/resources/FinalizerDummyData/HasFinalizerParams.class");
         List<ClassAdapter> adapterList = new ArrayList<>();
         adapterList.add(adapter);
         Check check = new NoFinalizerCheck();
