@@ -83,6 +83,7 @@ public class UMLParserTest {
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         ArrayList<ClassAdapter> classAdapters = (ArrayList<ClassAdapter>) projectDataManager.generateClassAdapters("./src/test/resources/PUMLDummyData/PUMLDependant");
         String result = parserUndertest.parseUML(classAdapters, "./src/test/resources/PUMLTest4GeneratedPUML"); // Can see output here if u want, can delete existing output and re-run too if u dont trusnt me
+        System.out.println(result);
         Assertions.assertEquals(
                 "@startuml\n" +
                         "class Dependency1{\n" +
