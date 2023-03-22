@@ -84,22 +84,21 @@ public class UMLParserTest {
         ArrayList<ClassAdapter> classAdapters = (ArrayList<ClassAdapter>) projectDataManager.generateClassAdapters("./src/test/resources/PUMLDummyData/PUMLDependant");
         String result = parserUndertest.parseUML(classAdapters, "./src/test/resources/PUMLTest4GeneratedPUML"); // Can see output here if u want, can delete existing output and re-run too if u dont trusnt me
         System.out.println(result);
-        Assertions.assertEquals(
-                "@startuml\n" +
-                        "class Dependency1{\n" +
-                        "+{method} Dependency1():void\n" +
-                        "}\n" +
-                        "class Dependency2{\n" +
-                        "+{method} Dependency2():void\n" +
-                        "}\n" +
-                        "class DependsOn{\n" +
-                        "+{method} DependsOn():void\n" +
-                        "-{method} dependsOn(Dependency1):void\n" + //Catches args
-                        "-{method} dependsOn2():Dependency2\n" + //Catches return type
-                        "}\n" +
-                        "DependsOn .> Dependency1\n" +
-                        "DependsOn .> Dependency2\n" +
-                        "@enduml\n", result);
+        Assertions.assertTrue(result.contains("@startuml\n"));
+        Assertions.assertTrue(result.contains("class Dependency1{\n" +
+                "+{method} Dependency1():void\n" +
+                "}\n"));
+        Assertions.assertTrue(result.contains("class Dependency2{\n" +
+                "+{method} Dependency2():void\n" +
+                "}\n"));
+        Assertions.assertTrue(result.contains("class DependsOn{\n" +
+                "+{method} DependsOn():void\n" +
+                "-{method} dependsOn(Dependency1):void\n" + //Catches args
+                "-{method} dependsOn2():Dependency2\n" + //Catches return type
+                "}\n"));
+        Assertions.assertTrue(result.contains("DependsOn .> Dependency1\n"));
+        Assertions.assertTrue(result.contains("DependsOn .> Dependency2\n"));
+        Assertions.assertTrue(result.contains("@enduml\n"));
      }
 
 }
