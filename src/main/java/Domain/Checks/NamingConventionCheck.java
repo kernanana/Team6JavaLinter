@@ -108,7 +108,8 @@ public class NamingConventionCheck implements Check{
         if(userOptions.namingConventionAutoCorrect){
             NamingConventionAutoCorrect autoCorrect = new NamingConventionAutoCorrect();
             try {
-                presentationInformation = autoCorrect.autoCorrect(classes, badClassNames, badFieldNameMap, badFinalFieldNameMap, badMethodNameMap, presentationInformation);
+                AutoCorrectDataHolder data = new AutoCorrectDataHolder(classes, badClassNames, badFieldNameMap, badFinalFieldNameMap, badMethodNameMap);
+                presentationInformation = autoCorrect.autoCorrect(data, presentationInformation);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } catch (NoSuchFieldException e) {

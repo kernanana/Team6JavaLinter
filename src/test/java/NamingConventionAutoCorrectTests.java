@@ -18,6 +18,7 @@ public class NamingConventionAutoCorrectTests {
         PresentationInformation result = cnCheck.check(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/GoodNames"), new UserOptions());
         Assertions.assertFalse(result.passed); //false if not violated
         Assertions.assertTrue(result.displayLines.size() == 0);
+
     }
 
     @Test
