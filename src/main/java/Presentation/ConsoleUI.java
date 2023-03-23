@@ -11,14 +11,16 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsoleUI extends UI {
+public class ConsoleUI {
 
+    Linter linter;
+    List<CheckType> availibleChecks;
 
-    public ConsoleUI(Linter linter, List<CheckType> availibleChecks) {
-        super(linter, availibleChecks);
+    public ConsoleUI(Linter linter, List<CheckType> availibleChecks){
+        this.linter = linter;
+        this.availibleChecks = availibleChecks;
     }
 
-    @Override
     public void UIMain() {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
