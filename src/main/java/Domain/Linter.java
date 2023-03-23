@@ -25,7 +25,8 @@ public class Linter {
         this.classAdapters = this.projectDataManager.generateClassAdapters(filePath);
         List<PresentationInformation> presentationInformations = new ArrayList<>();
         for (CheckType checkType : checksToRun){
-            presentationInformations.add(checkComposition.get(checkType).check(this.classAdapters, userOptions));
+            Check checkToRun = checkComposition.get(checkType);
+            presentationInformations.add(checkToRun.check(this.classAdapters, userOptions));
         }
         if (userOptions.parseUml){
             this.umlParser.parseUML(this.classAdapters, userOptions.umlOutputDirectory);
