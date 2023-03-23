@@ -13,7 +13,7 @@ public class EqualsHashCodeCheckTests {
         Check hasEqualsHasCodeCheck = new EqualsHashCodeCheck();
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        PresentationInformation result = hasEqualsHasCodeCheck.check(projectDataManager.generateClassAdapters("src/test/resources/EqualsHashCodeDummyData/hasEqualsNoHashCode"), new UserOptions());
+        PresentationInformation result = hasEqualsHasCodeCheck.check(projectDataManager.generateClassAdapters("./src/test/resources/EqualsHashCodeDummyData/hasEqualsNoHashCode"), new UserOptions());
         Assertions.assertFalse(result.passed); // Says a class failed
         Assertions.assertEquals("ASMPracticeCode/hasEqualsNoHashCode/hasEqualsNoHashCode missing hashCode method", result.displayLines.get(0)); //displays correct informaiton
     }
@@ -23,7 +23,7 @@ public class EqualsHashCodeCheckTests {
         Check hasEqualsHasCodeCheck = new EqualsHashCodeCheck();
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        PresentationInformation result = hasEqualsHasCodeCheck.check(projectDataManager.generateClassAdapters("src/test/resources/EqualsHashCodeDummyData/hasHashCodeNoEquals"), new UserOptions());
+        PresentationInformation result = hasEqualsHasCodeCheck.check(projectDataManager.generateClassAdapters("./src/test/resources/EqualsHashCodeDummyData/hasHashCodeNoEquals"), new UserOptions());
         Assertions.assertFalse(result.passed); // Says a class failed
         Assertions.assertEquals("ASMPracticeCode/hasHashCodeNoEquals/hasHashCodeNoEquals missing equals method", result.displayLines.get(0)); //displays correct informaiton
     }
@@ -32,7 +32,7 @@ public class EqualsHashCodeCheckTests {
         Check hasEqualsHasCodeCheck = new EqualsHashCodeCheck();
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        PresentationInformation result = hasEqualsHasCodeCheck.check(projectDataManager.generateClassAdapters("src/test/resources/EqualsHashCodeDummyData/hasNeitherEqualsNorHashCode"), new UserOptions());
+        PresentationInformation result = hasEqualsHasCodeCheck.check(projectDataManager.generateClassAdapters("./src/test/resources/EqualsHashCodeDummyData/hasNeitherEqualsNorHashCode"), new UserOptions());
         Assertions.assertTrue(result.passed); // Says no classes failed
         Assertions.assertEquals(0, result.displayLines.size()); //No display lines because all classes passed
     }
@@ -42,7 +42,7 @@ public class EqualsHashCodeCheckTests {
         Check hasEqualsHasCodeCheck = new EqualsHashCodeCheck();
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        PresentationInformation result = hasEqualsHasCodeCheck.check(projectDataManager.generateClassAdapters("src/test/resources/EqualsHashCodeDummyData/hasBothHashCodeAndEquals"), new UserOptions());
+        PresentationInformation result = hasEqualsHasCodeCheck.check(projectDataManager.generateClassAdapters("./src/test/resources/EqualsHashCodeDummyData/hasBothHashCodeAndEquals"), new UserOptions());
         Assertions.assertTrue(result.passed); // Says no classes failed
         Assertions.assertEquals(0, result.displayLines.size()); //No display lines because all classes passed
     }

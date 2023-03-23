@@ -16,8 +16,8 @@ public class HollywoodPrincipleTests {
     @Test
     public void testDetectsPattern() {
         ProjectDataManager manager = new ASMProjectDataManager(new DefaultDataLoader());
-        ClassAdapter adapter = manager.createClassAdapter("src/test/resources/HollywoodPrincipleDummyData/HighLevelComponent.class");
-        ClassAdapter adapter2 = manager.createClassAdapter("src/test/resources/HollywoodPrincipleDummyData/LowLevelComponent.class");
+        ClassAdapter adapter = manager.createClassAdapter("./src/test/resources/HollywoodPrincipleDummyData/HighLevelComponent.class");
+        ClassAdapter adapter2 = manager.createClassAdapter("./src/test/resources/HollywoodPrincipleDummyData/LowLevelComponent.class");
         List<ClassAdapter> adapterList = new ArrayList<>();
         adapterList.add(adapter);
         adapterList.add(adapter2);
@@ -31,8 +31,8 @@ public class HollywoodPrincipleTests {
     @Test
     public void testDetectsPatternObserver() {
         ProjectDataManager manager = new ASMProjectDataManager(new DefaultDataLoader());
-        ClassAdapter adapter = manager.createClassAdapter("src/test/resources/HollywoodPrincipleDummyData/Observer.class");
-        ClassAdapter adapter2 = manager.createClassAdapter("src/test/resources/HollywoodPrincipleDummyData/Observee.class");
+        ClassAdapter adapter = manager.createClassAdapter("./src/test/resources/HollywoodPrincipleDummyData/Observer.class");
+        ClassAdapter adapter2 = manager.createClassAdapter("./src/test/resources/HollywoodPrincipleDummyData/Observee.class");
         List<ClassAdapter> adapterList = new ArrayList<>();
         adapterList.add(adapter);
         adapterList.add(adapter2);
@@ -47,10 +47,10 @@ public class HollywoodPrincipleTests {
     @Test
     public void testDetectsMultiplePattern() {
         ProjectDataManager manager = new ASMProjectDataManager(new DefaultDataLoader());
-        ClassAdapter adapter = manager.createClassAdapter("src/test/resources/HollywoodPrincipleDummyData/HighLevelComponent.class");
-        ClassAdapter adapter2 = manager.createClassAdapter("src/test/resources/HollywoodPrincipleDummyData/LowLevelComponent.class");
-        ClassAdapter adapter3 = manager.createClassAdapter("src/test/resources/HollywoodPrincipleDummyData/Observer.class");
-        ClassAdapter adapter4 = manager.createClassAdapter("src/test/resources/HollywoodPrincipleDummyData/Observee.class");
+        ClassAdapter adapter = manager.createClassAdapter("./src/test/resources/HollywoodPrincipleDummyData/HighLevelComponent.class");
+        ClassAdapter adapter2 = manager.createClassAdapter("./src/test/resources/HollywoodPrincipleDummyData/LowLevelComponent.class");
+        ClassAdapter adapter3 = manager.createClassAdapter("./src/test/resources/HollywoodPrincipleDummyData/Observer.class");
+        ClassAdapter adapter4 = manager.createClassAdapter("./src/test/resources/HollywoodPrincipleDummyData/Observee.class");
         List<ClassAdapter> adapterList = new ArrayList<>();
         adapterList.add(adapter);
         adapterList.add(adapter2);
@@ -69,9 +69,9 @@ public class HollywoodPrincipleTests {
     @Test
     public void testDetectsNoViolation() {
         ProjectDataManager manager = new ASMProjectDataManager(new DefaultDataLoader());
-        ClassAdapter adapter = manager.createClassAdapter("src/test/resources/StrategyDummyData/StrategyInterface.class");
-        ClassAdapter adapter2 = manager.createClassAdapter("src/test/resources/StrategyDummyData/ConcreteStrategy.class");
-        ClassAdapter adapter3 = manager.createClassAdapter("src/test/resources/StrategyDummyData/ConcreteStrategy1.class");
+        ClassAdapter adapter = manager.createClassAdapter("./src/test/resources/StrategyDummyData/StrategyInterface.class");
+        ClassAdapter adapter2 = manager.createClassAdapter("./src/test/resources/StrategyDummyData/ConcreteStrategy.class");
+        ClassAdapter adapter3 = manager.createClassAdapter("./src/test/resources/StrategyDummyData/ConcreteStrategy1.class");
         List<ClassAdapter> adapterList = new ArrayList<>();
         adapterList.add(adapter);
         adapterList.add(adapter2);
