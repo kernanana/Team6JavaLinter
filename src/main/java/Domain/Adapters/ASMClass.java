@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ASMClass implements ClassAdapter{
+public class ASMClass implements ClassAdapter {
     private final ClassNode node;
 
     public ASMClass(ClassNode node){

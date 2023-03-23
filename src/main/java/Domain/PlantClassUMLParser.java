@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class PlantClassUMLParser extends UMLParser{
+public class PlantClassUMLParser {
 
     private SourceStringReaderAdapter sourceStringReaderAdapter;
     private UMLTextWriter umlTextWriter;
@@ -21,7 +21,6 @@ public class PlantClassUMLParser extends UMLParser{
         this.umlTextWriter = umlTextWriter;
     }
 
-    @Override
     public String parseUML(List<ClassAdapter> classes, String outPutFilePath) {
         String umlString = new String();
         umlString += "@startuml\n";

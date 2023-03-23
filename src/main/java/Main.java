@@ -26,7 +26,7 @@ public class Main {
         availibleChecks.add(CheckType.StrategyPattern);
         checkComposition.put(CheckType.StrategyPattern, new StrategyPatternCheck());
         ProjectDataManager projectDataManager = new ASMProjectDataManager(new DefaultDataLoader());
-        UMLParser umlParser = new PlantClassUMLParser(new PlantUMLSourceStringReader(new SourceStringReaderCreator()), new PrintWriterUMLTextWriter());
+        PlantClassUMLParser umlParser = new PlantClassUMLParser(new PlantUMLSourceStringReader(new SourceStringReaderCreator()), new PrintWriterUMLTextWriter());
         Linter linter = new Linter(checkComposition, projectDataManager, umlParser);
         ConsoleUI ui = new ConsoleUI(linter, availibleChecks);
         ui.UIMain();

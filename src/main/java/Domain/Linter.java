@@ -2,6 +2,7 @@ package Domain;
 
 import Domain.Adapters.ClassAdapter;
 import Domain.Checks.Check;
+import net.sourceforge.plantuml.graph2.Plan;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,9 +13,9 @@ public class Linter {
     private ProjectDataManager projectDataManager;
     private Map<CheckType, Check> checkComposition;
     private List<ClassAdapter> classAdapters;
-    private UMLParser umlParser;
+    private PlantClassUMLParser umlParser;
 
-    public Linter(Map<CheckType, Check> checkComposition, ProjectDataManager projectDataManager, UMLParser umlParser){
+    public Linter(Map<CheckType, Check> checkComposition, ProjectDataManager projectDataManager, PlantClassUMLParser umlParser){
         this.umlParser = umlParser;
         this.projectDataManager = projectDataManager;
         this.checkComposition = checkComposition;
