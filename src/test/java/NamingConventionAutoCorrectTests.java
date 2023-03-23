@@ -25,9 +25,11 @@ public class NamingConventionAutoCorrectTests {
         Check cnCheck = new NamingConventionCheck();
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        PresentationInformation result = cnCheck.check(projectDataManager.generateClassAdapters("src/test/resources/NamingConventionDummyData/BadClassName"), new UserOptions());
+        UserOptions userOptions = new UserOptions();
+        userOptions.namingConventionAutoCorrect = true;
+        PresentationInformation result = cnCheck.check(projectDataManager.generateClassAdapters("src/test/resources/NamingConventionDummyData/BadClassName"), userOptions);
         Assertions.assertTrue(result.passed); //true because a violation exists
-        Assertions.assertTrue(result.displayLines.size() == 2);
+        Assertions.assertTrue(result.displayLines.size() == 1);
         Assertions.assertTrue(result.displayLines.get(0).equals("Class name badClassName in ASMPracticeCode/NamingConventionDummyData/badClassName needs to be uppercased"));
         //below test will break code
         //Assertions.assertTrue(result.displayLines.get(1).equals("Class name badClassName in ASMPracticeCode/NamingConventionDummyData/badClassName changed to BadClassName"));
