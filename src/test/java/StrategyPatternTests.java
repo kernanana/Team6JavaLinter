@@ -17,16 +17,16 @@ public class StrategyPatternTests {
     @Test
     public void testCreatesAdapter() {
         ProjectDataManager manager = new ASMProjectDataManager(new DefaultDataLoader());
-        ClassAdapter adapter = manager.createClassAdapter("src/test/resources/StrategyDummyData/StrategyInterface.class");
+        ClassAdapter adapter = manager.createClassAdapter("./src/test/resources/StrategyDummyData/StrategyInterface.class");
         Assertions.assertEquals("ASMPracticeCode/StrategyDummyData/StrategyInterface", adapter.getClassName());
     }
 
     @Test
     public void testDetectsPattern() {
         ProjectDataManager manager = new ASMProjectDataManager(new DefaultDataLoader());
-        ClassAdapter adapter = manager.createClassAdapter("src/test/resources/StrategyDummyData/StrategyInterface.class");
-        ClassAdapter adapter2 = manager.createClassAdapter("src/test/resources/StrategyDummyData/ConcreteStrategy.class");
-        ClassAdapter adapter3 = manager.createClassAdapter("src/test/resources/StrategyDummyData/ConcreteStrategy1.class");
+        ClassAdapter adapter = manager.createClassAdapter("./src/test/resources/StrategyDummyData/StrategyInterface.class");
+        ClassAdapter adapter2 = manager.createClassAdapter("./src/test/resources/StrategyDummyData/ConcreteStrategy.class");
+        ClassAdapter adapter3 = manager.createClassAdapter("./src/test/resources/StrategyDummyData/ConcreteStrategy1.class");
         List<ClassAdapter> adapterList = new ArrayList<>();
         adapterList.add(adapter);
         adapterList.add(adapter2);
@@ -44,8 +44,8 @@ public class StrategyPatternTests {
     @Test
     public void testDetectsNoPattern() {
         ProjectDataManager manager = new ASMProjectDataManager(new DefaultDataLoader());
-        ClassAdapter adapter = manager.createClassAdapter("src/test/resources/HollywoodPrincipleDummyData/Observer.class");
-        ClassAdapter adapter2 = manager.createClassAdapter("src/test/resources/HollywoodPrincipleDummyData/Observee.class");
+        ClassAdapter adapter = manager.createClassAdapter("./src/test/resources/HollywoodPrincipleDummyData/Observer.class");
+        ClassAdapter adapter2 = manager.createClassAdapter("./src/test/resources/HollywoodPrincipleDummyData/Observee.class");
         List<ClassAdapter> adapterList = new ArrayList<>();
         adapterList.add(adapter);
         adapterList.add(adapter2);

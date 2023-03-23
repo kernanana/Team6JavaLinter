@@ -9,19 +9,19 @@ public class AdapterTests {
     @Test
     public void testLoadsBytes(){
         DefaultDataLoader loader = new DefaultDataLoader();
-        byte[] bytes = loader.loadFileBytes("src/test/resources/AbstractClass.class");
+        byte[] bytes = loader.loadFileBytes("./src/test/resources/AbstractClass.class");
         Assertions.assertNotNull(bytes);
     }
     @Test
     public void testCreatesAdapter() {
         ProjectDataManager manager = new ASMProjectDataManager(new DefaultDataLoader());
-        ClassAdapter adapter = manager.createClassAdapter("src/test/resources/AbstractClass.class");
+        ClassAdapter adapter = manager.createClassAdapter("./src/test/resources/AbstractClass.class");
         Assertions.assertEquals("ASMPracticeCode/AbstractClass", adapter.getClassName());
     }
     @Test
     public void testClassAdapterHasAllInfo() {
         ProjectDataManager manager = new ASMProjectDataManager(new DefaultDataLoader());
-        ClassAdapter adapter = manager.createClassAdapter("src/test/resources/AbstractClass.class");
+        ClassAdapter adapter = manager.createClassAdapter("./src/test/resources/AbstractClass.class");
         Assertions.assertEquals("ASMPracticeCode/AbstractClass", adapter.getClassName());
         Assertions.assertTrue(adapter.getIsPublic());
         Assertions.assertEquals(1,adapter.getAllFields().size());
