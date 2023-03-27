@@ -132,7 +132,9 @@ public class NamingConventionCheck implements Check {
 
         NamingConventionAutoCorrect autoCorrect = new NamingConventionAutoCorrect();
         try {
-            return autoCorrect.autoCorrect(classes, badClassNames, badFieldNameMap, badFinalFieldNameMap, badMethodNameMap, presentationInformation);
+            AutoCorrectDataHolder data = new AutoCorrectDataHolder(classes, badClassNames, badFieldNameMap, badFinalFieldNameMap, badMethodNameMap);
+            presentationInformation = autoCorrect.autoCorrect(data,presentationInformation);
+            return presentationInformation;
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (NoSuchFieldException e) {
