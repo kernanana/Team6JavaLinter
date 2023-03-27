@@ -10,8 +10,7 @@ import Domain.UserOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingletonPatternCheck implements Check{
-
+public class SingletonPatternCheck implements Check {
 
     @Override
     public PresentationInformation check(List<ClassAdapter> classes, UserOptions userOptions) {
@@ -19,56 +18,61 @@ public class SingletonPatternCheck implements Check{
         presentationInformation.checkName = CheckType.SingletonPattern;
         ArrayList<String> displayLines = new ArrayList<>();
 
-
-        for(int i=0;i<classes.size();i++){
-            boolean hasStaticFieldofItself = false;
-            boolean constructorIsPrivate = false;
-            boolean getInstanceReturnsItself = false;
-
-            String className = classes.get(i).getClassName();
-            className = className.substring(className.lastIndexOf("/") + 1);
-            //System.out.println("Class Name: "+className);
-            //check for static fields
-            List<FieldAdapter> fields = classes.get(i).getAllFields();
-            for(int j = 0; j < fields.size(); j++){
-                String fieldType = fields.get(j).getType();
-                fieldType = fieldType.substring(fieldType.lastIndexOf(".") + 1, fieldType.length()-1);
-                //System.out.println("Field Name: " +fieldType);
-                if(fieldType.equals(className)){
-                    if(fields.get(j).getIsStatic()){
-                        hasStaticFieldofItself = true;
-                        //System.out.println(className + " passed pt1");
-                        break;
-                    }
-                }
-            }
-            if (hasStaticFieldofItself == false){}
-            else{
-                List<MethodAdapter> methods = classes.get(i).getAllMethods();
-                for (int j=0; j<methods.size(); j++){
-                    String methodName = methods.get(j).getMethodName();
-                    //System.out.println(methodName);
-                    if(methodName.equals("<init>")){
-                        if(methods.get(j).getIsPrivate()){
-                            //System.out.println(className + " passed pt2");
-                            constructorIsPrivate = true;
-                        }
-                    }
-                    String methodReturn = methods.get(j).getReturnType();
-                    methodReturn = methodReturn.substring(methodReturn.lastIndexOf(".")+1, methodReturn.length());
-                    //System.out.println(methodName + "'s return type is: "+ methodReturn);
-                    if(methods.get(j).isStatic() && methods.get(j).getIsPublic() && methodReturn.equals(className)){
-                        //System.out.println(className + " passed pt3");
-                        getInstanceReturnsItself = true;
-                    }
-                }
-            }
-            if(hasStaticFieldofItself && constructorIsPrivate && getInstanceReturnsItself){
-                displayLines.add("Singleton Pattern detected for " + classes.get(i).getClassName());
+        for (ClassAdapter classAdapter : classes) {
+            if (isSingleton(classAdapter)) {
+                displayLines.add("Singleton Pattern detected for " + classAdapter.getClassName());
                 presentationInformation.passed = true;
             }
         }
+
         presentationInformation.displayLines = displayLines;
         return presentationInformation;
+    }
+
+    private boolean isSingleton(ClassAdapter classAdapter) {
+        boolean hasStaticFieldofItself = false;
+        boolean constructorIsPrivate = false;
+        boolean getInstanceReturnsItself = false;
+
+        String className = getClassName(classAdapter);
+        List<FieldAdapter> fields = classAdapter.getAllFields();
+        for (FieldAdapter fieldAdapter : fields) {
+            String fieldType = getFieldType(fieldAdapter);
+            if (fieldType.equals(className) && fieldAdapter.getIsStatic()) {
+                hasStaticFieldofItself = true;
+                break;
+            }
+        }
+
+        if (hasStaticFieldofItself) {
+            List<MethodAdapter> methods = classAdapter.getAllMethods();
+            for (MethodAdapter methodAdapter : methods) {
+                String methodName = methodAdapter.getMethodName();
+                if (methodName.equals("<init>") && methodAdapter.getIsPrivate()) {
+                    constructorIsPrivate = true;
+                }
+                String methodReturn = getMethodReturnType(methodAdapter);
+                if (methodAdapter.isStatic() && methodAdapter.getIsPublic() && methodReturn.equals(className)) {
+                    getInstanceReturnsItself = true;
+                }
+            }
+        }
+
+        return hasStaticFieldofItself && constructorIsPrivate && getInstanceReturnsItself;
+    }
+
+    private String getClassName(ClassAdapter classAdapter) {
+        String className = classAdapter.getClassName();
+        return className.substring(className.lastIndexOf("/") + 1);
+    }
+
+    private String getFieldType(FieldAdapter fieldAdapter) {
+        String fieldType = fieldAdapter.getType();
+        return fieldType.substring(fieldType.lastIndexOf(".") + 1, fieldType.length()-1);
+    }
+
+    private String getMethodReturnType(MethodAdapter methodAdapter) {
+        String methodReturn = methodAdapter.getReturnType();
+        return methodReturn.substring(methodReturn.lastIndexOf(".") + 1);
     }
 }
