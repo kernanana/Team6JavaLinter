@@ -91,9 +91,9 @@ public class ConsoleUI extends UI{
     private void displayResults(ArrayList<PresentationInformation> presentationInformations){
         for (PresentationInformation presentationInformation : presentationInformations){
             if (presentationInformation.passed){
-                System.out.println(presentationInformation.checkName.toString() + " passed!");
+                System.out.println(presentationInformation.returnUIMessage());
             }else{
-                System.out.println(presentationInformation.checkName.toString() + " failed!");
+                System.out.println(presentationInformation.returnUIMessage());
             }
             for (String displayline : presentationInformation.displayLines){
                 System.out.println("      " + displayline);
