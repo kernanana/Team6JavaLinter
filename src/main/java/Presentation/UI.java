@@ -14,9 +14,8 @@ import java.util.Map;
 
 public abstract class UI {
     protected Linter linter;
-    protected List<CheckType> availibleChecks;
-    protected static final List<CheckType> availableChecks = new ArrayList<>();
-    protected static final Map<CheckType, Check> checkComposition = new HashMap<>();
+    protected final List<CheckType> availableChecks = new ArrayList<>();
+    protected final Map<CheckType, Check> checkComposition = new HashMap<>();
     protected Map<String, Object> config;
 
     public UI (Linter linter, Map<String, Object> config){
