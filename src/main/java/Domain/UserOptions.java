@@ -4,6 +4,10 @@ public class UserOptions {
     private int maximumMethods;
     private String umlOutputDirectory;
     private boolean parseUml;
+
+    private boolean saveOutput;
+
+    private String txtOutputDirectory;
     private boolean namingConventionAutoCorrect;
 
     public UserOptions() {
@@ -30,6 +34,11 @@ public class UserOptions {
         umlOutputDirectory = outputDirectory;
     }
 
+    public void saveOutput(String outputDirectory){
+        saveOutput = true;
+        txtOutputDirectory = outputDirectory;
+    }
+
     public boolean hasUMLParse() {
         return parseUml;
     }
@@ -48,5 +57,9 @@ public class UserOptions {
 
     public String getUmlOutputDirectory() {
         return umlOutputDirectory;
+    }
+
+    public boolean hasSaveOutPut() {
+        return saveOutput;
     }
 }
