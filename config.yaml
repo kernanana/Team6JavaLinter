@@ -1,0 +1,12 @@
+directory:
+  ./build/classes/java/main/ASMPracticeCode/RedundantInterface
+
+checks:
+  PoorNamingConvention: true
+  EqualsHashCode: true
+  SingleResponsibilityPrinciple: true
+  InformationHidingViolation: true
+  SingletonPattern: true
+  DecoratorPattern: true
+  StrategyPattern: true
+  RedundantInterface: true

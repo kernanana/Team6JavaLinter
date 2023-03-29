@@ -18,4 +18,5 @@ public interface MethodAdapter {
     public abstract boolean isSetter();
     public abstract boolean getIsAbstract();
     public abstract boolean getIsPrivate();
+    public abstract String getSignature();
 }

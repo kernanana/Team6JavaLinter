@@ -105,4 +105,21 @@ public class ASMMethod implements MethodAdapter{
         return false;
     }
 
+    @Override
+    public String getSignature() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(getReturnType()).append(" ");
+        sb.append(getMethodName()).append("(");
+
+        if(getArgTypes().size() == 0)
+            return sb.append(")").toString();
+
+        for(String type : getArgTypes()) {
+            sb.append(type).append(", ");
+        }
+
+        return sb.replace(sb.length() - 2, sb.length(), ")").toString();
+    }
+
 }

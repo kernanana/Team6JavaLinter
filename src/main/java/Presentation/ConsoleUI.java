@@ -10,15 +10,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ConsoleUI {
 
     Linter linter;
     List<CheckType> availibleChecks;
+    Map<String, Object> config;
 
-    public ConsoleUI(Linter linter, List<CheckType> availibleChecks){
+    public ConsoleUI(Linter linter, List<CheckType> availibleChecks, Map<String, Object> config){
         this.linter = linter;
         this.availibleChecks = availibleChecks;
+        this.config = config;
     }
 
     public void UIMain() {
@@ -43,7 +46,13 @@ public class ConsoleUI {
             UserOptions userOptions = getUserOptions(checksToPerformTypes, reader);
             System.out.println("Please enter the full file path to the directory which contains the class files you would like to lint?");
             System.out.println("Notice: all class files in given directory will be linted, if you only want to lint a subset use a more specific directory.");
-            String filepath = reader.readLine();
+
+            String filepath;
+            if(config.containsKey("directory"))
+                filepath = (String) config.get("directory");
+            else
+                filepath = reader.readLine();
+
             ArrayList<PresentationInformation> presentationInformations = (ArrayList<PresentationInformation>) linter.runChecks(checksToPerformTypes, filepath, userOptions);
             this.displayResults(presentationInformations);
 
