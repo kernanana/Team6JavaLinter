@@ -3,6 +3,7 @@ import Domain.ASMProjectDataManager;
 import Domain.Adapters.ClassAdapter;
 import Domain.CheckType;
 import Domain.Checks.Check;
+import Domain.Checks.CheckData;
 import Domain.Checks.StrategyPatternCheck;
 import Domain.PresentationInformation;
 import Domain.ProjectDataManager;
@@ -32,7 +33,8 @@ public class StrategyPatternTests {
         adapterList.add(adapter2);
         adapterList.add(adapter3);
         Check check = new StrategyPatternCheck();
-        PresentationInformation info = check.check(adapterList, null);
+        CheckData checkData = new CheckData(adapterList, null);
+        PresentationInformation info = check.check(checkData);
         Assertions.assertTrue(info.passed);
         Assertions.assertEquals(CheckType.StrategyPattern, info.checkName);
 //        String str = "Strategy Pattern Detected!";
@@ -50,7 +52,8 @@ public class StrategyPatternTests {
         adapterList.add(adapter);
         adapterList.add(adapter2);
         Check check = new StrategyPatternCheck();
-        PresentationInformation info = check.check(adapterList, null);
+        CheckData checkData = new CheckData(adapterList, null);
+        PresentationInformation info = check.check(checkData);
         Assertions.assertFalse(info.passed);
         Assertions.assertEquals(CheckType.StrategyPattern, info.checkName);
         Assertions.assertEquals(0, info.displayLines.size());

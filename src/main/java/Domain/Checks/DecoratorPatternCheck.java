@@ -11,11 +11,12 @@ import java.util.List;
 
 public class DecoratorPatternCheck implements Check{
     @Override
-    public PresentationInformation check(List<ClassAdapter> classes, UserOptions userOptions) {
+    public PresentationInformation check(CheckData data) {
         PresentationInformation presentationInformation = new PresentationInformation();
         presentationInformation.checkName = CheckType.DecoratorPattern;
         ArrayList<String> displayLines = new ArrayList<>();
         presentationInformation.passed = false;
+        List<ClassAdapter> classes = data.getClasses();
         for (ClassAdapter classAdapter : classes){
             boolean isAbstract = classAdapter.getIsAbstract();
             boolean extendsClass = !classAdapter.getExtends().equals("java/lang/Object");

@@ -3,6 +3,7 @@ import Domain.ASMProjectDataManager;
 import Domain.Adapters.ClassAdapter;
 import Domain.CheckType;
 import Domain.Checks.Check;
+import Domain.Checks.CheckData;
 import Domain.Checks.NoFinalizerCheck;
 import Domain.PresentationInformation;
 import Domain.ProjectDataManager;
@@ -20,7 +21,8 @@ public class NoFinalizerTests {
         List<ClassAdapter> adapterList = new ArrayList<>();
         adapterList.add(adapter);
         Check check = new NoFinalizerCheck();
-        PresentationInformation info = check.check(adapterList, null);
+        CheckData checkData = new CheckData(adapterList, null);
+        PresentationInformation info = check.check(checkData);
         Assertions.assertFalse(info.passed);
         Assertions.assertEquals(CheckType.NoFinalizerCheck, info.checkName);
         String str = "Class: ASMPracticeCode/FinalizerDummyData/HasFinalizer contains finalize method with zero parameters";
@@ -34,7 +36,8 @@ public class NoFinalizerTests {
         List<ClassAdapter> adapterList = new ArrayList<>();
         adapterList.add(adapter);
         Check check = new NoFinalizerCheck();
-        PresentationInformation info = check.check(adapterList, null);
+        CheckData checkData = new CheckData(adapterList, null);
+        PresentationInformation info = check.check(checkData);
         Assertions.assertTrue(info.passed);
         Assertions.assertEquals(CheckType.NoFinalizerCheck, info.checkName);
     }

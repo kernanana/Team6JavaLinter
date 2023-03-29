@@ -1,6 +1,7 @@
 import DataSource.DefaultDataLoader;
 import Domain.ASMProjectDataManager;
 import Domain.Checks.Check;
+import Domain.Checks.CheckData;
 import Domain.Checks.NamingConventionCheck;
 import Domain.PresentationInformation;
 import Domain.ProjectDataManager;
@@ -15,7 +16,8 @@ public class NamingConventionCheckTests {
         Check cnCheck = new NamingConventionCheck();
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        PresentationInformation result = cnCheck.check(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/GoodNames"), new UserOptions());
+        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/GoodNames"), new UserOptions());
+        PresentationInformation result = cnCheck.check(checkData);
         Assertions.assertFalse(result.passed); //false if not violated
         Assertions.assertTrue(result.displayLines.size() == 0);
     }
@@ -25,7 +27,8 @@ public class NamingConventionCheckTests {
         Check cnCheck = new NamingConventionCheck();
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        PresentationInformation result = cnCheck.check(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/BadClassName"), new UserOptions());
+        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/BadClassName"), new UserOptions());
+        PresentationInformation result = cnCheck.check(checkData);
         Assertions.assertTrue(result.passed); //true because a violation exists
         Assertions.assertTrue(result.displayLines.size() == 1);
         Assertions.assertTrue(result.displayLines.get(0).equals("Class name badClassName in ASMPracticeCode/NamingConventionDummyData/badClassName needs to be uppercased"));
@@ -36,7 +39,8 @@ public class NamingConventionCheckTests {
         Check cnCheck = new NamingConventionCheck();
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        PresentationInformation result = cnCheck.check(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/BadNames"), new UserOptions());
+        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/BadNames"), new UserOptions());
+        PresentationInformation result = cnCheck.check(checkData);
         Assertions.assertTrue(result.passed); //true because a violation exists
         Assertions.assertTrue(result.displayLines.size() == 6);
         Assertions.assertTrue(result.displayLines.get(0).equals("Field name Field in ASMPracticeCode/NamingConventionDummyData/EverythingErrorClass needs to be lowercased"));

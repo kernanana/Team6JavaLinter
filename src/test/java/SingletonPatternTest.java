@@ -2,6 +2,7 @@ import ASMPracticeCode.SingletonPatternDummyData.EagerSingleton;
 import DataSource.DefaultDataLoader;
 import Domain.ASMProjectDataManager;
 import Domain.Checks.Check;
+import Domain.Checks.CheckData;
 import Domain.Checks.InformationHidingCheck;
 import Domain.Checks.SingletonPatternCheck;
 import Domain.PresentationInformation;
@@ -17,7 +18,8 @@ public class SingletonPatternTest {
         Check check = new SingletonPatternCheck();
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        PresentationInformation result = check.check(projectDataManager.generateClassAdapters("./src/test/resources/SingletonPatternDummyData/NotSingleton"), new UserOptions());
+        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/SingletonPatternDummyData/NotSingleton"), new UserOptions());
+        PresentationInformation result = check.check(checkData);
         Assertions.assertFalse(result.passed); //false if no Singleton detected
         Assertions.assertTrue(result.displayLines.size() == 0);
     }
@@ -26,7 +28,8 @@ public class SingletonPatternTest {
         Check check = new SingletonPatternCheck();
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        PresentationInformation result = check.check(projectDataManager.generateClassAdapters("./src/test/resources/SingletonPatternDummyData/EagerSingleton"), new UserOptions());
+        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/SingletonPatternDummyData/EagerSingleton"), new UserOptions());
+        PresentationInformation result = check.check(checkData);
         Assertions.assertTrue(result.passed); //false if no Singleton detected
         Assertions.assertTrue(result.displayLines.size() == 1);
         Assertions.assertEquals(result.displayLines.get(0), "Singleton Pattern detected for ASMPracticeCode/SingletonPatternDummyData/EagerSingleton");
@@ -37,7 +40,8 @@ public class SingletonPatternTest {
         Check check = new SingletonPatternCheck();
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        PresentationInformation result = check.check(projectDataManager.generateClassAdapters("./src/test/resources/SingletonPatternDummyData/LazySingleton"), new UserOptions());
+        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/SingletonPatternDummyData/LazySingleton"), new UserOptions());
+        PresentationInformation result = check.check(checkData);
         Assertions.assertTrue(result.passed); //false if no Singleton detected
         Assertions.assertTrue(result.displayLines.size() == 1);
         Assertions.assertEquals(result.displayLines.get(0), "Singleton Pattern detected for ASMPracticeCode/SingletonPatternDummyData/LazySingleton");

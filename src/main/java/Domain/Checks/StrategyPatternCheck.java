@@ -10,10 +10,12 @@ import java.util.List;
 
 public class StrategyPatternCheck implements Check{
     @Override
-    public PresentationInformation check(List<ClassAdapter> classes, UserOptions userOptions) {
+    public PresentationInformation check(CheckData data) {
         PresentationInformation information = new PresentationInformation();
         information.passed = false;
         List<String> displayInfo = new ArrayList<>();
+        List<ClassAdapter> classes = data.getClasses();
+        
         for (int x = 0; x < classes.size(); x++) {
             ClassAdapter abstractStrategy = classes.get(x);
             List<ClassAdapter> concreteStrategies = findLowerLevelClasses(abstractStrategy, classes);

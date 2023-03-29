@@ -14,9 +14,10 @@ import static java.util.Objects.isNull;
 
 public class HollywoodPrincipleCheck implements Check{
     @Override
-    public PresentationInformation check(List<ClassAdapter> classes, UserOptions userOptions) {
+    public PresentationInformation check(CheckData data) {
         PresentationInformation info = new PresentationInformation();
         info.passed = true;
+        List<ClassAdapter> classes = data.getClasses();
 
         List<String> displayInfo = new ArrayList<>();
         for (int x = 0; x < classes.size(); x ++) {

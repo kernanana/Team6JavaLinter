@@ -13,10 +13,11 @@ public class InformationHidingCheck implements Check{
 
 
     @Override
-    public PresentationInformation check(List<ClassAdapter> classes, UserOptions userOptions) {
+    public PresentationInformation check(CheckData data) {
         PresentationInformation presentationInformation = new PresentationInformation();
         presentationInformation.checkName = CheckType.InformationHidingViolation;
         ArrayList<String> displayLines = new ArrayList<>();
+        List<ClassAdapter> classes = data.getClasses();
         for (int i = 0; i < classes.size();i++){
             List<MethodAdapter> methods = classes.get(i).getAllMethods();
             int methodCount = methods.size() - 1;

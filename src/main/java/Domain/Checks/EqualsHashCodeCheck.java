@@ -12,11 +12,12 @@ import java.util.List;
 public class EqualsHashCodeCheck implements Check{
 
     @Override
-    public PresentationInformation check(List<ClassAdapter> classes, UserOptions userOptions) {
+    public PresentationInformation check(CheckData data) {
         PresentationInformation presentationInformation = new PresentationInformation();
         presentationInformation.checkName = CheckType.EqualsHashCode;
         ArrayList<String> displayLines = new ArrayList<>();
         presentationInformation.passed = true;
+        List<ClassAdapter> classes = data.getClasses();
         for (ClassAdapter classAdapter : classes){
             ArrayList<MethodAdapter> methodAdapters = (ArrayList<MethodAdapter>) classAdapter.getAllMethods();
             boolean hasEquals = false;

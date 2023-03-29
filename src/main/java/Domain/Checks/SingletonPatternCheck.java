@@ -13,10 +13,11 @@ import java.util.List;
 public class SingletonPatternCheck implements Check {
 
     @Override
-    public PresentationInformation check(List<ClassAdapter> classes, UserOptions userOptions) {
+    public PresentationInformation check(CheckData data) {
         PresentationInformation presentationInformation = new PresentationInformation();
         presentationInformation.checkName = CheckType.SingletonPattern;
         ArrayList<String> displayLines = new ArrayList<>();
+        List<ClassAdapter> classes = data.getClasses();
 
         for (ClassAdapter classAdapter : classes) {
             if (isSingleton(classAdapter)) {

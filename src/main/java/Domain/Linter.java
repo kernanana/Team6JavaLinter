@@ -2,6 +2,7 @@ package Domain;
 
 import Domain.Adapters.ClassAdapter;
 import Domain.Checks.Check;
+import Domain.Checks.CheckData;
 import net.sourceforge.plantuml.graph2.Plan;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class Linter {
         List<PresentationInformation> presentationInformations = new ArrayList<>();
         for (CheckType checkType : checksToRun){
             Check checkToRun = checkComposition.get(checkType);
-            presentationInformations.add(checkToRun.check(this.classAdapters, userOptions));
+            presentationInformations.add(checkToRun.check(new CheckData(classAdapters, userOptions)));
         }
         if (userOptions.parseUml){
             this.umlParser.parseUML(this.classAdapters, userOptions.umlOutputDirectory);

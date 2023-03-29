@@ -11,12 +11,14 @@ import java.util.List;
 
 public class NoFinalizerCheck implements Check{
     @Override
-    public PresentationInformation check(List<ClassAdapter> classes, UserOptions userOptions) {
+    public PresentationInformation check(CheckData data) {
         PresentationInformation info = new PresentationInformation();
         info.checkName = CheckType.NoFinalizerCheck;
         info.passed = true;
         List<String> displayInfo = new ArrayList<>();
         info.displayLines = displayInfo;
+        List<ClassAdapter> classes = data.getClasses();
+
         for (ClassAdapter aClass : classes) {
             boolean foundFinalize = lookForFinalize(aClass);
             if (foundFinalize) {
