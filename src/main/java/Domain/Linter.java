@@ -29,8 +29,8 @@ public class Linter {
             Check checkToRun = checkComposition.get(checkType);
             presentationInformations.add(checkToRun.check(new CheckData(classAdapters, userOptions)));
         }
-        if (userOptions.parseUml){
-            this.umlParser.parseUML(this.classAdapters, userOptions.umlOutputDirectory);
+        if (userOptions.hasUMLParse()){
+            this.umlParser.parseUML(this.classAdapters, userOptions.getUmlOutputDirectory());
         }
         return presentationInformations;
     }

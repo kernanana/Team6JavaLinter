@@ -19,9 +19,9 @@ public class InformationHidingCheckTests {
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/GetterSetterDummyData/DataClass"), new UserOptions());
         PresentationInformation result = check.check(checkData);
-        Assertions.assertFalse(result.passed); //false if no getters/setters or is a dataclass
-        Assertions.assertTrue(result.displayLines.size() == 1);
-        Assertions.assertTrue(result.displayLines.get(0).equals("Getter/Setter detected in ASMPracticeCode/GetterSetterDummyData/DataClass, but ignored since it is a data class"));
+        Assertions.assertFalse(result.hasPassed()); //false if no getters/setters or is a dataclass
+        Assertions.assertTrue(result.countDisplayLines() == 1);
+        Assertions.assertTrue(result.getDisplayLines().get(0).equals("Getter/Setter detected in ASMPracticeCode/GetterSetterDummyData/DataClass, but ignored since it is a data class"));
     }
 
     @Test
@@ -31,8 +31,8 @@ public class InformationHidingCheckTests {
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/GetterSetterDummyData/NoGetterSetter"), new UserOptions());
         PresentationInformation result = check.check(checkData);
-        Assertions.assertFalse(result.passed); //false if no getters/setters or is a dataclass
-        Assertions.assertTrue(result.displayLines.size() == 0);
+        Assertions.assertFalse(result.hasPassed()); //false if no getters/setters or is a dataclass
+        Assertions.assertTrue(result.countDisplayLines() == 0);
     }
 
     @Test
@@ -42,11 +42,11 @@ public class InformationHidingCheckTests {
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/GetterSetterDummyData/GetterSetter"), new UserOptions());
         PresentationInformation result = check.check(checkData);
-        Assertions.assertTrue(result.passed); //false if no getters/setters or is a dataclass
-        Assertions.assertEquals(result.displayLines.get(0), "setNumber in ASMPracticeCode/GetterSetterDummyData/GetterSetterClass is a Setter");
-        Assertions.assertEquals(result.displayLines.get(1), "setString in ASMPracticeCode/GetterSetterDummyData/GetterSetterClass is a Setter");
-        Assertions.assertEquals(result.displayLines.get(2), "getNumber in ASMPracticeCode/GetterSetterDummyData/GetterSetterClass is a Getter");
-        Assertions.assertEquals(result.displayLines.get(3), "getString in ASMPracticeCode/GetterSetterDummyData/GetterSetterClass is a Getter");
+        Assertions.assertTrue(result.hasPassed()); //false if no getters/setters or is a dataclass
+        Assertions.assertEquals(result.getDisplayLines().get(0), "setNumber in ASMPracticeCode/GetterSetterDummyData/GetterSetterClass is a Setter");
+        Assertions.assertEquals(result.getDisplayLines().get(1), "setString in ASMPracticeCode/GetterSetterDummyData/GetterSetterClass is a Setter");
+        Assertions.assertEquals(result.getDisplayLines().get(2), "getNumber in ASMPracticeCode/GetterSetterDummyData/GetterSetterClass is a Getter");
+        Assertions.assertEquals(result.getDisplayLines().get(3), "getString in ASMPracticeCode/GetterSetterDummyData/GetterSetterClass is a Getter");
         //Assertions.assertTrue(result.displayLines.size() == 0);
     }
 }

@@ -4,7 +4,6 @@ import Domain.Adapters.ClassAdapter;
 import Domain.Adapters.MethodAdapter;
 import Domain.CheckType;
 import Domain.PresentationInformation;
-import Domain.UserOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,23 +11,20 @@ import java.util.List;
 public class NoFinalizerCheck implements Check{
     @Override
     public PresentationInformation check(CheckData data) {
-        PresentationInformation info = new PresentationInformation();
-        info.checkName = CheckType.NoFinalizerCheck;
-        info.passed = true;
-        List<String> displayInfo = new ArrayList<>();
-        info.displayLines = displayInfo;
+        PresentationInformation info = new PresentationInformation(CheckType.NoFinalizerCheck);
+        info.passedCheck();
         List<ClassAdapter> classes = data.getClasses();
 
         for (ClassAdapter aClass : classes) {
             boolean foundFinalize = lookForFinalize(aClass);
             if (foundFinalize) {
                 String str = "Class: " + aClass.getClassName() + " contains finalize method with zero parameters";
-                displayInfo.add(str);
+                info.addDisplayLine(str);
             }
         }
 
-        if (displayInfo.size() > 0) {
-            info.passed = false;
+        if (info.countDisplayLines() > 0) {
+            info.failedCheck();
         }
         return info;
     }

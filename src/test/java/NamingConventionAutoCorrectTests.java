@@ -18,8 +18,8 @@ public class NamingConventionAutoCorrectTests {
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/GoodNames"), new UserOptions());
         PresentationInformation result = cnCheck.check(checkData);
-        Assertions.assertFalse(result.passed); //false if not violated
-        Assertions.assertTrue(result.displayLines.size() == 0);
+        Assertions.assertFalse(result.hasPassed()); //false if not violated
+        Assertions.assertTrue(result.getDisplayLines().size() == 0);
 
     }
 
@@ -29,12 +29,12 @@ public class NamingConventionAutoCorrectTests {
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         UserOptions userOptions = new UserOptions();
-        userOptions.namingConventionAutoCorrect = true;
+        userOptions.doAutoCorrect();
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/BadClassName"), userOptions);
         PresentationInformation result = cnCheck.check(checkData);
-        Assertions.assertTrue(result.passed); //true because a violation exists
-        Assertions.assertTrue(result.displayLines.size() == 1);
-        Assertions.assertTrue(result.displayLines.get(0).equals("Class name badClassName in ASMPracticeCode/NamingConventionDummyData/badClassName needs to be uppercased"));
+        Assertions.assertTrue(result.hasPassed()); //true because a violation exists
+        Assertions.assertTrue(result.countDisplayLines() == 1);
+        Assertions.assertTrue(result.getDisplayLines().get(0).equals("Class name badClassName in ASMPracticeCode/NamingConventionDummyData/badClassName needs to be uppercased"));
         //below test will break code
         //Assertions.assertTrue(result.displayLines.get(1).equals("Class name badClassName in ASMPracticeCode/NamingConventionDummyData/badClassName changed to BadClassName"));
     }
@@ -46,13 +46,13 @@ public class NamingConventionAutoCorrectTests {
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/BadNames"), new UserOptions());
         PresentationInformation result = cnCheck.check(checkData);
-        Assertions.assertTrue(result.passed); //true because a violation exists
-        Assertions.assertTrue(result.displayLines.get(0).equals("Field name Field in ASMPracticeCode/NamingConventionDummyData/EverythingErrorClass needs to be lowercased"));
-        Assertions.assertTrue(result.displayLines.get(1).equals("Field name FIeLD1 in ASMPracticeCode/NamingConventionDummyData/EverythingErrorClass needs to be ALL CAPS with _ as spaces"));
-        Assertions.assertTrue(result.displayLines.get(2).equals("Field name field_2 in ASMPracticeCode/NamingConventionDummyData/EverythingErrorClass needs to be ALL CAPS with _ as spaces"));
-        Assertions.assertTrue(result.displayLines.get(3).equals("Field name FIELD_3 in ASMPracticeCode/NamingConventionDummyData/EverythingErrorClass needs to be lowercased"));
-        Assertions.assertTrue(result.displayLines.get(4).equals("Method name Method in ASMPracticeCode/NamingConventionDummyData/EverythingErrorClass needs to be lowercased"));
-        Assertions.assertTrue(result.displayLines.get(5).equals("Method name METHOD_2 in ASMPracticeCode/NamingConventionDummyData/EverythingErrorClass needs to be lowercased"));
+        Assertions.assertTrue(result.hasPassed()); //true because a violation exists
+        Assertions.assertTrue(result.getDisplayLines().get(0).equals("Field name Field in ASMPracticeCode/NamingConventionDummyData/EverythingErrorClass needs to be lowercased"));
+        Assertions.assertTrue(result.getDisplayLines().get(1).equals("Field name FIeLD1 in ASMPracticeCode/NamingConventionDummyData/EverythingErrorClass needs to be ALL CAPS with _ as spaces"));
+        Assertions.assertTrue(result.getDisplayLines().get(2).equals("Field name field_2 in ASMPracticeCode/NamingConventionDummyData/EverythingErrorClass needs to be ALL CAPS with _ as spaces"));
+        Assertions.assertTrue(result.getDisplayLines().get(3).equals("Field name FIELD_3 in ASMPracticeCode/NamingConventionDummyData/EverythingErrorClass needs to be lowercased"));
+        Assertions.assertTrue(result.getDisplayLines().get(4).equals("Method name Method in ASMPracticeCode/NamingConventionDummyData/EverythingErrorClass needs to be lowercased"));
+        Assertions.assertTrue(result.getDisplayLines().get(5).equals("Method name METHOD_2 in ASMPracticeCode/NamingConventionDummyData/EverythingErrorClass needs to be lowercased"));
 //        Assertions.assertTrue(result.displayLines.size() == 12);
         //Below lines will break code
 //        Assertions.assertTrue(result.displayLines.get(6).equals("Field name Field in ASMPracticeCode/NamingConventionDummyData/EverythingErrorClass changed to field"));

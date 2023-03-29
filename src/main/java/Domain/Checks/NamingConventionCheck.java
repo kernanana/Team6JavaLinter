@@ -23,12 +23,13 @@ public class NamingConventionCheck implements Check {
 
     @Override
     public PresentationInformation check(CheckData data) {
-        PresentationInformation presentationInformation = new PresentationInformation();
-        presentationInformation.checkName = CheckType.PoorNamingConvention;
+        PresentationInformation presentationInformation = new PresentationInformation(CheckType.PoorNamingConvention);
         BadNames badNames = new BadNames();
         ArrayList<String> displayLines = new ArrayList<>();
         List<ClassAdapter> classes = data.getClasses();
-        UserOptions userOptions = data.getUserOptions();
+        UserOptions userOptions = new UserOptions();
+        if(data.hasUserOptions())
+            userOptions = data.getUserOptions();
         //instantiate names into lists
         for (ClassAdapter classAdapter : classes) {
             badNames.changeClassAdapter(classAdapter);
@@ -36,10 +37,9 @@ public class NamingConventionCheck implements Check {
         }
 
         //do the check on fields
-        if(userOptions.namingConventionAutoCorrect)
+        if(userOptions.hasAutoCorrect())
             presentationInformation = tryAutoCorrect(classes, badNames, presentationInformation);
 
-        presentationInformation.displayLines = displayLines;
         return presentationInformation;
     }
 
@@ -49,19 +49,19 @@ public class NamingConventionCheck implements Check {
         List<MethodAdapter> methods = classAdapter.getAllMethods();
         badNames.changeClassAdapter(classAdapter);
 
-        checkClassName(badNames, presentationInformation, displayLines, className);
+        checkClassName(badNames, presentationInformation, className);
 
         for (FieldAdapter field : fields) {
-            checkFieldName(field, presentationInformation, displayLines, className, badNames);
+            checkFieldName(field, presentationInformation, className, badNames);
         }
 
         for (MethodAdapter method : methods) {
-            checkMethodName(method, presentationInformation, displayLines, className, badNames);
+            checkMethodName(method, presentationInformation, className, badNames);
         }
 
     }
 
-    private void checkMethodName(MethodAdapter method, PresentationInformation presentationInformation, ArrayList<String> displayLines, String className, BadNames badNames) {
+    private void checkMethodName(MethodAdapter method, PresentationInformation presentationInformation, String className, BadNames badNames) {
         String mname = method.getMethodName();
         Matcher matcher = lowerCaseChar.matcher(mname.substring(0, 1));
         if(matcher.matches()){
@@ -72,13 +72,13 @@ public class NamingConventionCheck implements Check {
         }
         else{
             badNames.addBadMethodName(method);
-            displayLines.add("Method name "+mname+" in "+ className +" needs to be lowercased");
-            presentationInformation.passed = true;
+            presentationInformation.addDisplayLine("Method name "+mname+" in "+ className +" needs to be lowercased");
+            presentationInformation.passedCheck();
         }
     }
 
     private void checkFieldName(FieldAdapter field, PresentationInformation presentationInformation,
-                                ArrayList<String> displayLines, String className, BadNames badNames) {
+                                String className, BadNames badNames) {
         //add check for final fields
         boolean isFinal = field.getIsFinal();
         String fname = field.getFieldName();
@@ -91,8 +91,8 @@ public class NamingConventionCheck implements Check {
             }
             else{
                 badNames.addBadFieldName(field, false);
-                displayLines.add("Field name "+fname+" in "+ className +" needs to be lowercased");
-                presentationInformation.passed = true;
+                presentationInformation.addDisplayLine("Field name "+fname+" in "+ className +" needs to be lowercased");
+                presentationInformation.passedCheck();
             }
         }
         //final check
@@ -103,21 +103,21 @@ public class NamingConventionCheck implements Check {
                     //did nothing before just added ""
                 } else {
                     badNames.addBadFieldName(field, true);
-                    displayLines.add("Field name "+fname+" in "+ className + " needs to be ALL CAPS with _ as spaces");
-                    presentationInformation.passed = true;
+                    presentationInformation.addDisplayLine("Field name "+fname+" in "+ className + " needs to be ALL CAPS with _ as spaces");
+                    presentationInformation.passedCheck();
                     break;
                 }
             }
         }
     }
 
-    private void checkClassName(BadNames badNames, PresentationInformation presentationInformation, ArrayList<String> displayLines, String className) {
+    private void checkClassName(BadNames badNames, PresentationInformation presentationInformation, String className) {
         String trimClassName = className.substring(className.lastIndexOf("/") + 1);
         Matcher classNameCheck = upperCaseChar.matcher(trimClassName.substring(0,1));
         if (!classNameCheck.matches()){
             badNames.addBadClassName(trimClassName);
-            displayLines.add("Class name " + trimClassName + " in "+ className + " needs to be uppercased");
-            presentationInformation.passed = true;
+            presentationInformation.addDisplayLine("Class name " + trimClassName + " in "+ className + " needs to be uppercased");
+            presentationInformation.passedCheck();
         }
     }
 

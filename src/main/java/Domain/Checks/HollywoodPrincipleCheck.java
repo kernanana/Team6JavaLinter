@@ -5,7 +5,6 @@ import Domain.Adapters.FieldAdapter;
 import Domain.Adapters.MethodAdapter;
 import Domain.CheckType;
 import Domain.PresentationInformation;
-import Domain.UserOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,18 +14,17 @@ import static java.util.Objects.isNull;
 public class HollywoodPrincipleCheck implements Check{
     @Override
     public PresentationInformation check(CheckData data) {
-        PresentationInformation info = new PresentationInformation();
-        info.passed = true;
+        PresentationInformation info = new PresentationInformation(CheckType.HollywoodPrinciple);
         List<ClassAdapter> classes = data.getClasses();
+        info.passedCheck();
 
-        List<String> displayInfo = new ArrayList<>();
         for (int x = 0; x < classes.size(); x ++) {
             ClassAdapter highLevelClass = getHighLevelClass(classes.get(x), classes);
             if (!isNull(highLevelClass)){
                 boolean dependency = checkDependsOn(highLevelClass, classes.get(x));
                 if (dependency){
-                    info.passed = false;
-                    displayInfo.add(formatLine(highLevelClass, classes.get(x)));
+                    info.failedCheck();
+                    info.addDisplayLine(formatLine(highLevelClass, classes.get(x)));
                 }
             }
         }
@@ -36,14 +34,12 @@ public class HollywoodPrincipleCheck implements Check{
             for (int i = 0; i < highLevelClasses.size(); i ++) {
                 boolean dependency = checkDependsOn(highLevelClasses.get(i), classes.get(x));
                 if (dependency){
-                    info.passed = false;
-                    displayInfo.add(formatLine(highLevelClasses.get(i), classes.get(x)));
+                    info.failedCheck();
+                    info.addDisplayLine(formatLine(highLevelClasses.get(i), classes.get(x)));
                 }
             }
         }
 
-        info.checkName = CheckType.HollywoodPrinciple;
-        info.displayLines = displayInfo;
         return info;
     }
 

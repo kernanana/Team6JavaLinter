@@ -17,8 +17,8 @@ public class DecoratorPatternTest {
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/DecoratorPatternDummyData/DecoratorPatternHasPattern"), new UserOptions());
         PresentationInformation result = decoratorCheck.check(checkData);
-        Assertions.assertTrue(result.passed); // Says that pattern was detected
-        Assertions.assertEquals("ASMPracticeCode/DecoratorPatternHasPattern/Decorator decorates ASMPracticeCode/DecoratorPatternHasPattern/Decorated", result.displayLines.get(0)); //displays correct informaiton
+        Assertions.assertTrue(result.hasPassed()); // Says that pattern was detected
+        Assertions.assertEquals("ASMPracticeCode/DecoratorPatternHasPattern/Decorator decorates ASMPracticeCode/DecoratorPatternHasPattern/Decorated", result.getDisplayLines().get(0)); //displays correct informaiton
     }
 
     @Test
@@ -28,8 +28,8 @@ public class DecoratorPatternTest {
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/DecoratorPatternDummyData/DecoratorPatternDoesntExtend"), new UserOptions());
         PresentationInformation result = decoratorCheck.check(checkData);
-        Assertions.assertFalse(result.passed); // Says that pattern was not detected
-        Assertions.assertEquals(0, result.displayLines.size()); //no information because the pattern was never found
+        Assertions.assertFalse(result.hasPassed()); // Says that pattern was not detected
+        Assertions.assertEquals(0, result.countDisplayLines()); //no information because the pattern was never found
     }
 
     @Test
@@ -39,7 +39,7 @@ public class DecoratorPatternTest {
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/DecoratorPatternDummyData/DecoratorPatternDoesntHaveInstance"), new UserOptions());
         PresentationInformation result = decoratorCheck.check(checkData);
-        Assertions.assertFalse(result.passed); // Says that pattern was not detected
-        Assertions.assertEquals(0, result.displayLines.size()); //no information because the pattern was never found
+        Assertions.assertFalse(result.hasPassed()); // Says that pattern was not detected
+        Assertions.assertEquals(0, result.countDisplayLines()); //no information because the pattern was never found
     }
 }

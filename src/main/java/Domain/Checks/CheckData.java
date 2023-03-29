@@ -22,5 +22,9 @@ public class CheckData {
         return userOptions;
     }
 
+    public boolean hasUserOptions() {
+        return userOptions != null && userOptions.isDefined();
+    }
+
 
 }

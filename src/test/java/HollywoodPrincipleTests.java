@@ -25,10 +25,10 @@ public class HollywoodPrincipleTests {
         Check check = new HollywoodPrincipleCheck();
         CheckData checkData = new CheckData(adapterList, null);
         PresentationInformation info = check.check(checkData);
-        Assertions.assertFalse(info.passed);
-        Assertions.assertEquals(CheckType.HollywoodPrinciple, info.checkName);
+        Assertions.assertFalse(info.hasPassed());
+        Assertions.assertEquals(CheckType.HollywoodPrinciple, info.getCheckName());
         String str = "High level class: ASMPracticeCode/HollywoodPrincipleDummyData/HighLevelComponent is called by low level class: ASMPracticeCode/HollywoodPrincipleDummyData/LowLevelComponent";
-        Assertions.assertEquals(str, info.displayLines.get(0));
+        Assertions.assertEquals(str, info.getDisplayLines().get(0));
     }
     @Test
     public void testDetectsPatternObserver() {
@@ -41,10 +41,10 @@ public class HollywoodPrincipleTests {
         Check check = new HollywoodPrincipleCheck();
         CheckData checkData = new CheckData(adapterList, null);
         PresentationInformation info = check.check(checkData);
-        Assertions.assertFalse(info.passed);
-        Assertions.assertEquals(CheckType.HollywoodPrinciple, info.checkName);
+        Assertions.assertFalse(info.hasPassed());
+        Assertions.assertEquals(CheckType.HollywoodPrinciple, info.getCheckName());
         String str = "High level class: ASMPracticeCode/HollywoodPrincipleDummyData/Observer is called by low level class: ASMPracticeCode/HollywoodPrincipleDummyData/Observee";
-        Assertions.assertEquals(str, info.displayLines.get(0));
+        Assertions.assertEquals(str, info.getDisplayLines().get(0));
     }
 
     @Test
@@ -62,12 +62,12 @@ public class HollywoodPrincipleTests {
         Check check = new HollywoodPrincipleCheck();
         CheckData checkData = new CheckData(adapterList, null);
         PresentationInformation info = check.check(checkData);
-        Assertions.assertFalse(info.passed);
-        Assertions.assertEquals(CheckType.HollywoodPrinciple, info.checkName);
+        Assertions.assertFalse(info.hasPassed());
+        Assertions.assertEquals(CheckType.HollywoodPrinciple, info.getCheckName());
         String str = "High level class: ASMPracticeCode/HollywoodPrincipleDummyData/HighLevelComponent is called by low level class: ASMPracticeCode/HollywoodPrincipleDummyData/LowLevelComponent";
-        Assertions.assertEquals(str, info.displayLines.get(0));
+        Assertions.assertEquals(str, info.getDisplayLines().get(0));
         String str2 = "High level class: ASMPracticeCode/HollywoodPrincipleDummyData/Observer is called by low level class: ASMPracticeCode/HollywoodPrincipleDummyData/Observee";
-        Assertions.assertEquals(str2, info.displayLines.get(1));
+        Assertions.assertEquals(str2, info.getDisplayLines().get(1));
     }
 
     @Test
@@ -83,8 +83,8 @@ public class HollywoodPrincipleTests {
         Check check = new HollywoodPrincipleCheck();
         CheckData checkData = new CheckData(adapterList, null);
         PresentationInformation info = check.check(checkData);
-        Assertions.assertTrue(info.passed);
-        Assertions.assertEquals(CheckType.HollywoodPrinciple, info.checkName);
-        Assertions.assertEquals(0, info.displayLines.size());
+        Assertions.assertTrue(info.hasPassed());
+        Assertions.assertEquals(CheckType.HollywoodPrinciple, info.getCheckName());
+        Assertions.assertEquals(0, info.getDisplayLines().size());
     }
 }

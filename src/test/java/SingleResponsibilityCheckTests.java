@@ -17,10 +17,9 @@ public class SingleResponsibilityCheckTests {
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         UserOptions userOptions = new UserOptions();
-        userOptions.maximumMethods = -1; //Set default
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/SingleResponsibilityPrincipleDummyData/SingleResponsibilityCheckAllInOne"), userOptions);
         PresentationInformation result = singleResponsibilityCheck.check(checkData);
-        Assertions.assertEquals("The median amount of public methods is 2. We will consider over 2 public methods a violation", result.displayLines.get(0)); //displays correct informaiton, classes under test have 1, 2, and 3 public methods respectivly
+        Assertions.assertEquals("The median amount of public methods is 2. We will consider over 2 public methods a violation", result.getDisplayLines().get(0)); //displays correct informaiton, classes under test have 1, 2, and 3 public methods respectivly
     }
 
     @Test
@@ -29,10 +28,10 @@ public class SingleResponsibilityCheckTests {
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         UserOptions userOptions = new UserOptions();
-        userOptions.maximumMethods = 0; //Set to non-default value
+        userOptions.defineMaxMethods(0); //Set to non-default value
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/SingleResponsibilityPrincipleDummyData/SingleResponsibilityCheckAllInOne"), userOptions);
         PresentationInformation result = singleResponsibilityCheck.check(checkData);
-        Assertions.assertEquals("The maximum amount of public methods is 0. We will consider over 0 public methods a violation", result.displayLines.get(0)); //displays correct informaiton, classes under test have 1, 2, and 3 public methods respectivly
+        Assertions.assertEquals("The maximum amount of public methods is 0. We will consider over 0 public methods a violation", result.getDisplayLines().get(0)); //displays correct informaiton, classes under test have 1, 2, and 3 public methods respectivly
     }
 
     @Test
@@ -41,11 +40,10 @@ public class SingleResponsibilityCheckTests {
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         UserOptions userOptions = new UserOptions();
-        userOptions.maximumMethods = -1; //Set default
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/SingleResponsibilityPrincipleDummyData/SingleResponsibilityCheckAllInOne"), userOptions);
         PresentationInformation result = singleResponsibilityCheck.check(checkData);
-        Assertions.assertEquals("ASMPracticeCode/SingleResponsibilityCheckAllInOne/IHaveThreePublicMethods has 3 public methods", result.displayLines.get(1)); //displays correct informaiton, classes under test have 1, 2, and 3 public methods respectivly, only the one with 3 should fail
-        Assertions.assertEquals(2, result.displayLines.size()); //Only line stating max amount and the one class that failed
+        Assertions.assertEquals("ASMPracticeCode/SingleResponsibilityCheckAllInOne/IHaveThreePublicMethods has 3 public methods", result.getDisplayLines().get(1)); //displays correct informaiton, classes under test have 1, 2, and 3 public methods respectivly, only the one with 3 should fail
+        Assertions.assertEquals(2, result.countDisplayLines()); //Only line stating max amount and the one class that failed
     }
 
     @Test
@@ -54,12 +52,12 @@ public class SingleResponsibilityCheckTests {
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         UserOptions userOptions = new UserOptions();
-        userOptions.maximumMethods = 1; //Set to one
+        userOptions.defineMaxMethods(1); //Set to one
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/SingleResponsibilityPrincipleDummyData/SingleResponsibilityCheckAllInOne"), userOptions);
         PresentationInformation result = singleResponsibilityCheck.check(checkData);
-        Assertions.assertEquals("ASMPracticeCode/SingleResponsibilityCheckAllInOne/IHaveTwoPublicMethods has 2 public methods", result.displayLines.get(1)); //displays correct informaiton, classes under test have 1, 2, and 3 public methods respectivly, 2 and 3 fail here
-        Assertions.assertEquals("ASMPracticeCode/SingleResponsibilityCheckAllInOne/IHaveThreePublicMethods has 3 public methods", result.displayLines.get(2)); //displays correct informaiton, classes under test have 1, 2, and 3 public methods respectivly, 2 and 3 fail here
-        Assertions.assertEquals(3, result.displayLines.size()); //Only line stating max amount and the two classes that failed
+        Assertions.assertEquals("ASMPracticeCode/SingleResponsibilityCheckAllInOne/IHaveTwoPublicMethods has 2 public methods", result.getDisplayLines().get(1)); //displays correct informaiton, classes under test have 1, 2, and 3 public methods respectivly, 2 and 3 fail here
+        Assertions.assertEquals("ASMPracticeCode/SingleResponsibilityCheckAllInOne/IHaveThreePublicMethods has 3 public methods", result.getDisplayLines().get(2)); //displays correct informaiton, classes under test have 1, 2, and 3 public methods respectivly, 2 and 3 fail here
+        Assertions.assertEquals(3, result.countDisplayLines()); //Only line stating max amount and the two classes that failed
     }
 
     @Test
@@ -68,10 +66,10 @@ public class SingleResponsibilityCheckTests {
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         UserOptions userOptions = new UserOptions();
-        userOptions.maximumMethods = 0; //Set to zero
+        userOptions.defineMaxMethods(0); //Set to zero
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/SingleResponsibilityPrincipleDummyData/AllPrivate"), userOptions);
         PresentationInformation result = singleResponsibilityCheck.check(checkData);
-        Assertions.assertTrue(result.passed); //Passed as class only has 2 private methods
-        Assertions.assertEquals(1, result.displayLines.size()); //None fail, only displays amount that is considered max
+        Assertions.assertTrue(result.hasPassed()); //Passed as class only has 2 private methods
+        Assertions.assertEquals(1, result.getDisplayLines().size()); //None fail, only displays amount that is considered max
     }
 }

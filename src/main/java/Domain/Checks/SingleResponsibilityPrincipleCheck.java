@@ -18,12 +18,12 @@ public class SingleResponsibilityPrincipleCheck implements Check{
     @Override
     public PresentationInformation check(CheckData data) {
         List<ClassAdapter> classes = data.getClasses();
-        UserOptions userOptions = data.getUserOptions();
-        this.maximumMethods = userOptions.maximumMethods;
-        PresentationInformation presentationInformation = new PresentationInformation();
-        presentationInformation.checkName = CheckType.SingleResponsibilityPrinciple;
-        ArrayList<String> displayLines = new ArrayList<String>();
-        presentationInformation.passed = true;
+        UserOptions userOptions = new UserOptions();
+        if(data.hasUserOptions())
+            userOptions = data.getUserOptions();
+
+        PresentationInformation presentationInformation = new PresentationInformation(CheckType.SingleResponsibilityPrinciple);
+        presentationInformation.passedCheck();
         HashMap<String,Integer> classNameToCount = new HashMap<>();
         for (ClassAdapter classAdapter : classes){
             ArrayList<MethodAdapter> methodAdapters = (ArrayList<MethodAdapter>) classAdapter.getAllMethods();
@@ -36,26 +36,27 @@ public class SingleResponsibilityPrincipleCheck implements Check{
             classNameToCount.put(classAdapter.getClassName(), count);
         }
         boolean didSetMax = true;
-        if (this.maximumMethods == -1){
+        this.maximumMethods = userOptions.getMaximumMethods();
+        if (!userOptions.maxMethodsIsDefined()){
             didSetMax = false;
             ArrayList<Integer> methodsAsList = new ArrayList<Integer>(classNameToCount.values());
             Collections.sort(methodsAsList);
             this.maximumMethods = methodsAsList.get(methodsAsList.size()/2);
         }
         if (!didSetMax){
-            displayLines.add("The median amount of public methods is " + this.maximumMethods +
+            presentationInformation.addDisplayLine("The median amount of public methods is " + this.maximumMethods +
                     ". We will consider over " + this.maximumMethods + " public methods a violation");
         }else{
-            displayLines.add("The maximum amount of public methods is " + this.maximumMethods +
+            presentationInformation.addDisplayLine("The maximum amount of public methods is " + this.maximumMethods +
                     ". We will consider over " + this.maximumMethods + " public methods a violation");
         }
         for (String key : classNameToCount.keySet()) {
             if (classNameToCount.get(key) > this.maximumMethods){
-                presentationInformation.passed = false;
-                displayLines.add(key + " has " + Integer.toString(classNameToCount.get(key)) + " public methods");
+                presentationInformation.failedCheck();
+                presentationInformation.addDisplayLine(key + " has " + Integer.toString(classNameToCount.get(key)) + " public methods");
             }
         }
-        presentationInformation.displayLines = displayLines;
+
         return presentationInformation;
     }
 }

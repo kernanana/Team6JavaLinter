@@ -4,7 +4,6 @@ import Domain.Adapters.ClassAdapter;
 import Domain.Adapters.FieldAdapter;
 import Domain.CheckType;
 import Domain.PresentationInformation;
-import Domain.UserOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +11,7 @@ import java.util.List;
 public class DecoratorPatternCheck implements Check{
     @Override
     public PresentationInformation check(CheckData data) {
-        PresentationInformation presentationInformation = new PresentationInformation();
-        presentationInformation.checkName = CheckType.DecoratorPattern;
-        ArrayList<String> displayLines = new ArrayList<>();
-        presentationInformation.passed = false;
+        PresentationInformation presentationInformation = new PresentationInformation(CheckType.DecoratorPattern);
         List<ClassAdapter> classes = data.getClasses();
         for (ClassAdapter classAdapter : classes){
             boolean isAbstract = classAdapter.getIsAbstract();
@@ -29,8 +25,8 @@ public class DecoratorPatternCheck implements Check{
                             String className = this.parseExtendedClass(classAdapter2.getClassName());
                             if (className.equals(fieldType)){
                                 if (classAdapter2.getIsAbstract()){
-                                    presentationInformation.passed = true;
-                                    displayLines.add(classAdapter.getClassName() + " decorates " + classAdapter2.getClassName());
+                                    presentationInformation.passedCheck();
+                                    presentationInformation.addDisplayLine(classAdapter.getClassName() + " decorates " + classAdapter2.getClassName());
                                 }
                             }
                         }
@@ -38,7 +34,7 @@ public class DecoratorPatternCheck implements Check{
                 }
             }
         }
-        presentationInformation.displayLines = displayLines;
+
         return presentationInformation;
     }
 

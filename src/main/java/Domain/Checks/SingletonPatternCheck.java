@@ -14,19 +14,16 @@ public class SingletonPatternCheck implements Check {
 
     @Override
     public PresentationInformation check(CheckData data) {
-        PresentationInformation presentationInformation = new PresentationInformation();
-        presentationInformation.checkName = CheckType.SingletonPattern;
-        ArrayList<String> displayLines = new ArrayList<>();
+        PresentationInformation presentationInformation = new PresentationInformation(CheckType.SingletonPattern);
         List<ClassAdapter> classes = data.getClasses();
 
         for (ClassAdapter classAdapter : classes) {
             if (isSingleton(classAdapter)) {
-                displayLines.add("Singleton Pattern detected for " + classAdapter.getClassName());
-                presentationInformation.passed = true;
+                presentationInformation.addDisplayLine("Singleton Pattern detected for " + classAdapter.getClassName());
+                presentationInformation.passedCheck();
             }
         }
 
-        presentationInformation.displayLines = displayLines;
         return presentationInformation;
     }
 

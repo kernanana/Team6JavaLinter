@@ -57,10 +57,8 @@ public class ConsoleUI extends UI{
             System.out.println("You have selected to check for the Single Responsibility Principle, what would you like to set as your maximum amount of public methods?");
             System.out.println("You may enter a number or simply enter \"default\"");
             String maximumMethods = reader.readLine();
-            if (maximumMethods.toLowerCase().trim().equals("default")){
-                userOptions.maximumMethods = -1;
-            }else{
-                userOptions.maximumMethods = Integer.parseInt(maximumMethods);
+            if (!maximumMethods.toLowerCase().trim().equals("default")){
+                userOptions.defineMaxMethods(Integer.parseInt(maximumMethods));
             }
         }
         if(checksToPerformTypes.contains(CheckType.PoorNamingConvention)){
@@ -68,36 +66,24 @@ public class ConsoleUI extends UI{
             System.out.println("Please enter yes or no");
             String stnReader = reader.readLine();
             if(stnReader.toLowerCase().trim().equals("yes")){
-                userOptions.namingConventionAutoCorrect = true;
-            } else if (stnReader.toLowerCase().trim().equals("no")) {
-                userOptions.namingConventionAutoCorrect = false;
-            }
-            else {
+                userOptions.doAutoCorrect();
+            } else if (!stnReader.toLowerCase().trim().equals("no")) {
                 System.out.println("Invalid input, autocorrect is not enabled");
-                userOptions.namingConventionAutoCorrect = false;
             }
         }
         System.out.println("Would you like to generate a uml? (yes or no)");
         if (reader.readLine().toLowerCase().equals("yes")){
-            userOptions.parseUml = true;
             System.out.println("What is the directory you would like the uml image and text to be outputted to? Please enter the full file path.");
-            userOptions.umlOutputDirectory = reader.readLine();
-        }else{
-            userOptions.parseUml = false;
+            userOptions.doUMLParse(reader.readLine());
         }
+
         return userOptions;
     }
 
     private void displayResults(ArrayList<PresentationInformation> presentationInformations){
         for (PresentationInformation presentationInformation : presentationInformations){
-            if (presentationInformation.passed){
                 System.out.println(presentationInformation.returnUIMessage());
-            }else{
-                System.out.println(presentationInformation.returnUIMessage());
-            }
-            for (String displayline : presentationInformation.displayLines){
-                System.out.println("      " + displayline);
-            }
+                System.out.println(presentationInformation.printToDisplay());
         }
     }
 }

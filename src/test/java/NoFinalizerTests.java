@@ -23,10 +23,10 @@ public class NoFinalizerTests {
         Check check = new NoFinalizerCheck();
         CheckData checkData = new CheckData(adapterList, null);
         PresentationInformation info = check.check(checkData);
-        Assertions.assertFalse(info.passed);
-        Assertions.assertEquals(CheckType.NoFinalizerCheck, info.checkName);
+        Assertions.assertFalse(info.hasPassed());
+        Assertions.assertEquals(CheckType.NoFinalizerCheck, info.getCheckName());
         String str = "Class: ASMPracticeCode/FinalizerDummyData/HasFinalizer contains finalize method with zero parameters";
-        Assertions.assertEquals(str, info.displayLines.get(0));
+        Assertions.assertEquals(str, info.getDisplayLines().get(0));
     }
 
     @Test
@@ -38,7 +38,7 @@ public class NoFinalizerTests {
         Check check = new NoFinalizerCheck();
         CheckData checkData = new CheckData(adapterList, null);
         PresentationInformation info = check.check(checkData);
-        Assertions.assertTrue(info.passed);
-        Assertions.assertEquals(CheckType.NoFinalizerCheck, info.checkName);
+        Assertions.assertTrue(info.hasPassed());
+        Assertions.assertEquals(CheckType.NoFinalizerCheck, info.getCheckName());
     }
 }

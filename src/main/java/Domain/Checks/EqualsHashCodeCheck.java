@@ -4,7 +4,6 @@ import Domain.Adapters.ClassAdapter;
 import Domain.Adapters.MethodAdapter;
 import Domain.CheckType;
 import Domain.PresentationInformation;
-import Domain.UserOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +12,8 @@ public class EqualsHashCodeCheck implements Check{
 
     @Override
     public PresentationInformation check(CheckData data) {
-        PresentationInformation presentationInformation = new PresentationInformation();
-        presentationInformation.checkName = CheckType.EqualsHashCode;
-        ArrayList<String> displayLines = new ArrayList<>();
-        presentationInformation.passed = true;
+        PresentationInformation presentationInformation = new PresentationInformation(CheckType.EqualsHashCode);
+        presentationInformation.passedCheck();
         List<ClassAdapter> classes = data.getClasses();
         for (ClassAdapter classAdapter : classes){
             ArrayList<MethodAdapter> methodAdapters = (ArrayList<MethodAdapter>) classAdapter.getAllMethods();
@@ -31,15 +28,15 @@ public class EqualsHashCodeCheck implements Check{
                 }
             }
             if (hasEquals ^ hasHashCode){
-                presentationInformation.passed = false;
+                presentationInformation.failedCheck();
                 if (!hasEquals){
-                    displayLines.add(classAdapter.getClassName() + " missing equals method");
+                    presentationInformation.addDisplayLine(classAdapter.getClassName() + " missing equals method");
                 }else{
-                    displayLines.add(classAdapter.getClassName() + " missing hashCode method");
+                    presentationInformation.addDisplayLine(classAdapter.getClassName() + " missing hashCode method");
                 }
             }
         }
-        presentationInformation.displayLines = displayLines;
+
         return presentationInformation;
     }
 
