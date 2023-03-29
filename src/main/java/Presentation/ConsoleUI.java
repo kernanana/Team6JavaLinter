@@ -40,8 +40,8 @@ public class ConsoleUI extends UI {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
         System.out.println("What checks would you like to perform?");
-        for (int i = 0; i < this.availibleChecks.size(); i++){
-            System.out.println((i + 1) + ". " + this.availibleChecks.get(i).toString());
+        for (int i = 0; i < availibleChecks.size(); i++){
+            System.out.println((i + 1) + ". " + availibleChecks.get(i).toString());
         }
         System.out.println("Example answer: 1,3,2");
         try {
@@ -53,7 +53,7 @@ public class ConsoleUI extends UI {
             }
             ArrayList<CheckType> checksToPerformTypes = new ArrayList<>();
             for (Integer checkToPerformInt : intChecksToPerform){
-                checksToPerformTypes.add(this.availibleChecks.get(checkToPerformInt));
+                checksToPerformTypes.add(availibleChecks.get(checkToPerformInt));
             }
             UserOptions userOptions = getUserOptions(reader);
             System.out.println("Please enter the full file path to the directory which contains the class files you would like to lint?");
