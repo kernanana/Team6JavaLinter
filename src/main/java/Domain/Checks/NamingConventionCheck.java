@@ -6,7 +6,6 @@ import Domain.Adapters.MethodAdapter;
 import Domain.CheckType;
 import Domain.PresentationInformation;
 import Domain.UserOptions;
-import org.objectweb.asm.tree.ClassNode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,110 +15,126 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class NamingConventionCheck implements Check{
+public class NamingConventionCheck implements Check {
 
+    private static final Pattern upperCaseChar = Pattern.compile("[A-Z]");
+    private static final Pattern lowerCaseChar = Pattern.compile("[a-z]");
+    private static final Pattern finalNaming = Pattern.compile("[A-Z_0-9]");
 
     @Override
-    public PresentationInformation check(List<ClassAdapter> classes, UserOptions userOptions) {
-        List<String> badClassNames = new ArrayList<>();
-        Map<ClassAdapter, List<FieldAdapter>> badFieldNameMap = new HashMap<>();
-        Map<ClassAdapter, List<FieldAdapter>> badFinalFieldNameMap = new HashMap<>();
-        Map<ClassAdapter, List<MethodAdapter>> badMethodNameMap = new HashMap<>();
-        PresentationInformation presentationInformation = new PresentationInformation();
-        presentationInformation.checkName = CheckType.PoorNamingConvention;
+    public PresentationInformation check(CheckData data) {
+        PresentationInformation presentationInformation = new PresentationInformation(CheckType.PoorNamingConvention);
+        BadNames badNames = new BadNames();
         ArrayList<String> displayLines = new ArrayList<>();
-
-        Pattern upperCaseChar = Pattern.compile("[A-Z]");
-        Pattern lowerCaseChar = Pattern.compile("[a-z]");
-        Pattern finalNaming = Pattern.compile("[A-Z_0-9]");
-
+        List<ClassAdapter> classes = data.getClasses();
+        UserOptions userOptions = new UserOptions();
+        if(data.hasUserOptions())
+            userOptions = data.getUserOptions();
         //instantiate names into lists
-        for(int i = 0; i < classes.size(); i++){
-            String className = classes.get(i).getClassName();
-            List<FieldAdapter> fields = classes.get(i).getAllFields();
-            List<MethodAdapter> methods = classes.get(i).getAllMethods();
-
-            List<FieldAdapter> badFieldNames = new ArrayList<>();
-            List<MethodAdapter> badMethodNames = new ArrayList<>();
-            List<FieldAdapter> badFinalFieldNames = new ArrayList<>();
-
-            String trimClassName = className.substring(className.lastIndexOf("/") + 1);
-            Matcher classNameCheck = upperCaseChar.matcher(trimClassName.substring(0,1));
-            if (!classNameCheck.matches()){
-                badClassNames.add(trimClassName);
-                displayLines.add("Class name " + trimClassName + " in "+className + " needs to be uppercased");
-                presentationInformation.passed = true;
-            }
-
-            for(int j = 0; j < fields.size(); j++){
-                //add check for final fields
-                boolean isFinal = fields.get(j).getIsFinal();
-                String fname = fields.get(j).getFieldName();
-                //System.out.println(fname + " is Final: " + isFinal);
-                //nonfinal check
-                if(!isFinal){
-                    Matcher matcher = lowerCaseChar.matcher(fname.substring(0, 1));
-                    if(matcher.matches()){
-                        //did nothing before just added ""
-                    }
-                    else{
-                        badFieldNames.add(fields.get(j));
-                        displayLines.add("Field name "+fname+" in "+ className +" needs to be lowercased");
-                        presentationInformation.passed = true;
-                    }
-                }
-                //final check
-                else{
-                    for(int k=0; k<fname.length();k++) {
-                        Matcher fmatcher = finalNaming.matcher(fname.substring(k, k+1));
-                        if (fmatcher.matches()) {
-                            //did nothing before just added ""
-                        } else {
-                            badFinalFieldNames.add(fields.get(k));
-                            displayLines.add("Field name "+fname+" in "+ className + " needs to be ALL CAPS with _ as spaces");
-                            presentationInformation.passed = true;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            for(int j = 0; j < methods.size(); j++){
-                String mname = methods.get(j).getMethodName();
-                Matcher matcher = lowerCaseChar.matcher(mname.substring(0, 1));
-                if(matcher.matches()){
-                    //did nothing before just added ""
-                }
-                else if (mname.equals("<init>")){
-                    //does nothing b/c a contructor must always be identical to its class name
-                }
-                else{
-                    badMethodNames.add(methods.get(j));
-                    displayLines.add("Method name "+mname+" in "+ className +" needs to be lowercased");
-                    presentationInformation.passed = true;
-                }
-            }
-            badFieldNameMap.put(classes.get(i), badFieldNames);
-            badFinalFieldNameMap.put(classes.get(i), badFinalFieldNames);
-            badMethodNameMap.put(classes.get(i), badMethodNames);
+        for (ClassAdapter classAdapter : classes) {
+            badNames.changeClassAdapter(classAdapter);
+            checkClass(classAdapter, presentationInformation, displayLines, badNames);
         }
 
         //do the check on fields
-        if(userOptions.namingConventionAutoCorrect){
-            NamingConventionAutoCorrect autoCorrect = new NamingConventionAutoCorrect();
-            try {
-                presentationInformation = autoCorrect.autoCorrect(classes, badClassNames, badFieldNameMap, badFinalFieldNameMap, badMethodNameMap, presentationInformation);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (NoSuchFieldException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        presentationInformation.displayLines = displayLines;
+        if(userOptions.hasAutoCorrect())
+            presentationInformation = tryAutoCorrect(classes, badNames, presentationInformation);
+
         return presentationInformation;
     }
 
+    private void checkClass(ClassAdapter classAdapter, PresentationInformation presentationInformation, ArrayList<String> displayLines, BadNames badNames) {
+        String className = classAdapter.getClassName();
+        List<FieldAdapter> fields = classAdapter.getAllFields();
+        List<MethodAdapter> methods = classAdapter.getAllMethods();
+        badNames.changeClassAdapter(classAdapter);
 
+        checkClassName(badNames, presentationInformation, className);
+
+        for (FieldAdapter field : fields) {
+            checkFieldName(field, presentationInformation, className, badNames);
+        }
+
+        for (MethodAdapter method : methods) {
+            checkMethodName(method, presentationInformation, className, badNames);
+        }
+
+    }
+
+    private void checkMethodName(MethodAdapter method, PresentationInformation presentationInformation, String className, BadNames badNames) {
+        String mname = method.getMethodName();
+        Matcher matcher = lowerCaseChar.matcher(mname.substring(0, 1));
+        if(matcher.matches()){
+            //did nothing before just added ""
+        }
+        else if (mname.equals("<init>")){
+            //does nothing b/c a contructor must always be identical to its class name
+        }
+        else{
+            badNames.addBadMethodName(method);
+            presentationInformation.addDisplayLine("Method name "+mname+" in "+ className +" needs to be lowercased");
+            presentationInformation.passedCheck();
+        }
+    }
+
+    private void checkFieldName(FieldAdapter field, PresentationInformation presentationInformation,
+                                String className, BadNames badNames) {
+        //add check for final fields
+        boolean isFinal = field.getIsFinal();
+        String fname = field.getFieldName();
+
+        //nonfinal check
+        if(!isFinal) {
+            Matcher matcher = lowerCaseChar.matcher(fname.substring(0, 1));
+            if(matcher.matches()){
+                //did nothing before just added ""
+            }
+            else{
+                badNames.addBadFieldName(field, false);
+                presentationInformation.addDisplayLine("Field name "+fname+" in "+ className +" needs to be lowercased");
+                presentationInformation.passedCheck();
+            }
+        }
+        //final check
+        else {
+            for(int k=0; k<fname.length();k++) {
+                Matcher fmatcher = finalNaming.matcher(fname.substring(k, k+1));
+                if (fmatcher.matches()) {
+                    //did nothing before just added ""
+                } else {
+                    badNames.addBadFieldName(field, true);
+                    presentationInformation.addDisplayLine("Field name "+fname+" in "+ className + " needs to be ALL CAPS with _ as spaces");
+                    presentationInformation.passedCheck();
+                    break;
+                }
+            }
+        }
+    }
+
+    private void checkClassName(BadNames badNames, PresentationInformation presentationInformation, String className) {
+        String trimClassName = className.substring(className.lastIndexOf("/") + 1);
+        Matcher classNameCheck = upperCaseChar.matcher(trimClassName.substring(0,1));
+        if (!classNameCheck.matches()){
+            badNames.addBadClassName(trimClassName);
+            presentationInformation.addDisplayLine("Class name " + trimClassName + " in "+ className + " needs to be uppercased");
+            presentationInformation.passedCheck();
+        }
+    }
+
+    private PresentationInformation tryAutoCorrect(List<ClassAdapter> classes, BadNames badNames, PresentationInformation presentationInformation) {
+
+        NamingConventionAutoCorrect autoCorrect = new NamingConventionAutoCorrect();
+        try {
+            AutoCorrectDataHolder data = new AutoCorrectDataHolder(classes, badNames);
+            presentationInformation = autoCorrect.autoCorrect(data,presentationInformation);
+            return presentationInformation;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
 }
 

@@ -10,24 +10,23 @@ import java.util.List;
 
 public class StrategyPatternCheck implements Check{
     @Override
-    public PresentationInformation check(List<ClassAdapter> classes, UserOptions userOptions) {
-        PresentationInformation information = new PresentationInformation();
-        information.passed = false;
-        List<String> displayInfo = new ArrayList<>();
+    public PresentationInformation check(CheckData data) {
+        PresentationInformation information = new PresentationInformation(CheckType.StrategyPattern);
+        List<ClassAdapter> classes = data.getClasses();
+        
         for (int x = 0; x < classes.size(); x++) {
             ClassAdapter abstractStrategy = classes.get(x);
             List<ClassAdapter> concreteStrategies = findLowerLevelClasses(abstractStrategy, classes);
             if (concreteStrategies.size() > 0) {
                 String line = formatDisplayLine(abstractStrategy, concreteStrategies);
-                displayInfo.add(line);
+                information.addDisplayLine(line);
             }
         }
 
-        if (displayInfo.size() > 0) {
-            information.passed = true;
+        if (information.countDisplayLines() > 0) {
+            information.passedCheck();
         }
-        information.displayLines = displayInfo;
-        information.checkName = CheckType.StrategyPattern;
+
         return information;
     }
 
