@@ -19,11 +19,15 @@ public class SingleResponsibilityPrincipleCheck implements Check{
     public PresentationInformation check(CheckData data) {
         List<ClassAdapter> classes = data.getClasses();
         UserOptions userOptions = new UserOptions();
-        if(data.hasUserOptions())
+
+        if(data.hasUserOptions()) {
             userOptions = data.getUserOptions();
+        }
 
         PresentationInformation presentationInformation = new PresentationInformation(CheckType.SingleResponsibilityPrinciple);
+
         presentationInformation.passedCheck();
+
         HashMap<String,Integer> classNameToCount = new HashMap<>();
         for (ClassAdapter classAdapter : classes){
             ArrayList<MethodAdapter> methodAdapters = (ArrayList<MethodAdapter>) classAdapter.getAllMethods();
@@ -35,8 +39,10 @@ public class SingleResponsibilityPrincipleCheck implements Check{
             }
             classNameToCount.put(classAdapter.getClassName(), count);
         }
+
         boolean didSetMax = true;
         this.maximumMethods = userOptions.getMaximumMethods();
+
         if (!userOptions.maxMethodsIsDefined()){
             didSetMax = false;
             ArrayList<Integer> methodsAsList = new ArrayList<Integer>(classNameToCount.values());
@@ -46,7 +52,8 @@ public class SingleResponsibilityPrincipleCheck implements Check{
         if (!didSetMax){
             presentationInformation.addDisplayLine("The median amount of public methods is " + this.maximumMethods +
                     ". We will consider over " + this.maximumMethods + " public methods a violation");
-        }else{
+        }
+        else{
             presentationInformation.addDisplayLine("The maximum amount of public methods is " + this.maximumMethods +
                     ". We will consider over " + this.maximumMethods + " public methods a violation");
         }

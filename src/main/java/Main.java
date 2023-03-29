@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
         ProjectDataManager projectDataManager = new ASMProjectDataManager(new DefaultDataLoader());
-        PlantClassUMLParser umlParser = new PlantClassUMLParser(new PlantUMLSourceStringReader(new SourceStringReaderCreator()), new PrintWriterUMLTextWriter());
+        PlantClassUMLParser umlParser = new PlantClassUMLParser(new PlantUMLSourceStringReader(), new PrintWriterUMLTextWriter());
         Linter linter = new Linter(projectDataManager, umlParser);
         UI ui = new ConsoleUI(linter, config);
         ui.UIMain();
