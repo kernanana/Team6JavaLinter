@@ -23,6 +23,7 @@ public class ASMField implements FieldAdapter{
 
     @Override
     public String getType() {
+        System.out.println(Type.getObjectType(node.desc).getClassName());
         return Type.getObjectType(node.desc).getClassName();
     }
 
@@ -39,5 +40,17 @@ public class ASMField implements FieldAdapter{
     @Override
     public  boolean getIsFinal(){
         return (node.access & Opcodes.ACC_FINAL) != 0;
+    }
+
+    @Override
+    public boolean isList() {
+        return getType().contains(".List;");
+    }
+
+    @Override
+    public String getCollectionType(){
+        int startIndex = node.signature.indexOf("<L");
+        int endIndex = node.signature.indexOf(";>");
+        return node.signature.substring(startIndex + 2, endIndex);
     }
 }
