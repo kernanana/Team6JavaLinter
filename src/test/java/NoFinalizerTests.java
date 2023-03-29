@@ -3,6 +3,7 @@ import Domain.ASMProjectDataManager;
 import Domain.Adapters.ClassAdapter;
 import Domain.CheckType;
 import Domain.Checks.Check;
+import Domain.Checks.CheckData;
 import Domain.Checks.NoFinalizerCheck;
 import Domain.PresentationInformation;
 import Domain.ProjectDataManager;
@@ -20,11 +21,12 @@ public class NoFinalizerTests {
         List<ClassAdapter> adapterList = new ArrayList<>();
         adapterList.add(adapter);
         Check check = new NoFinalizerCheck();
-        PresentationInformation info = check.check(adapterList, null);
-        Assertions.assertFalse(info.passed);
-        Assertions.assertEquals(CheckType.NoFinalizerCheck, info.checkName);
+        CheckData checkData = new CheckData(adapterList, null);
+        PresentationInformation info = check.check(checkData);
+        Assertions.assertFalse(info.hasPassed());
+        Assertions.assertEquals(CheckType.NoFinalizerCheck, info.getCheckName());
         String str = "Class: ASMPracticeCode/FinalizerDummyData/HasFinalizer contains finalize method with zero parameters";
-        Assertions.assertEquals(str, info.displayLines.get(0));
+        Assertions.assertEquals(str, info.getDisplayLines().get(0));
     }
 
     @Test
@@ -34,8 +36,9 @@ public class NoFinalizerTests {
         List<ClassAdapter> adapterList = new ArrayList<>();
         adapterList.add(adapter);
         Check check = new NoFinalizerCheck();
-        PresentationInformation info = check.check(adapterList, null);
-        Assertions.assertTrue(info.passed);
-        Assertions.assertEquals(CheckType.NoFinalizerCheck, info.checkName);
+        CheckData checkData = new CheckData(adapterList, null);
+        PresentationInformation info = check.check(checkData);
+        Assertions.assertTrue(info.hasPassed());
+        Assertions.assertEquals(CheckType.NoFinalizerCheck, info.getCheckName());
     }
 }

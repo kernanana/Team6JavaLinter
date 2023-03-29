@@ -11,22 +11,22 @@ public class NamingConventionAutoCorrect {
 
     public NamingConventionAutoCorrect(){}
 
-    public PresentationInformation autoCorrect(List<ClassAdapter> classes, List<String> badClassNames, Map<ClassAdapter, List<FieldAdapter>> badFieldNames, Map<ClassAdapter, List<FieldAdapter>> badFinalFieldNames, Map<ClassAdapter, List<MethodAdapter>> badMethodNames, PresentationInformation pi) throws IOException, NoSuchFieldException {
+    public PresentationInformation autoCorrect(AutoCorrectDataHolder data, PresentationInformation pi) throws IOException, NoSuchFieldException {
         //className autoCorrect
-        for (ClassAdapter badClass:badFieldNames.keySet()){
+        for (ClassAdapter badClass:data.getBadFields().keySet()){
             byte[] output;
             String className = badClass.getClassName();
             className = className.replace("/", ".");
             System.out.println(className);
-            for(int i=0;i<badFieldNames.get(badClass).size();i++){
-                String badName = badFieldNames.get(badClass).get(i).getFieldName();
+            for(int i=0;i<data.getBadFields().get(badClass).size();i++){
+                String badName = data.getBadFields().get(badClass).get(i).getFieldName();
                 System.out.println("Need to remove: " + badName);
                 String goodName = badName.substring(0,1).toLowerCase() + badName.substring(1);
                 System.out.println("Change to: " + goodName);
                 int accessType;
-                if(badFieldNames.get(badClass).get(i).getIsPublic()){
+                if(data.getBadFields().get(badClass).get(i).getIsPublic()){
                     accessType = Opcodes.ACC_PUBLIC;
-                } else if (badFieldNames.get(badClass).get(i).getIsProtected()) {
+                } else if (data.getBadFields().get(badClass).get(i).getIsProtected()) {
                     accessType = Opcodes.ACC_PROTECTED;
                 }
                 else{
