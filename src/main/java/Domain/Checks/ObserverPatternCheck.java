@@ -22,41 +22,45 @@ public class ObserverPatternCheck implements Check{
     private ClassAdapter concObserver = null;
 
     @Override
-    public PresentationInformation check(List<ClassAdapter> classes, UserOptions userOptions) {
-        PresentationInformation presentationInformation = new PresentationInformation();
-        presentationInformation.checkName = CheckType.ObserverPattern;
-        ArrayList<String> displayLines = new ArrayList<>();
-        presentationInformation.passed = false;
-        this.classes = classes;
-
+    public PresentationInformation check(CheckData data) {
+        PresentationInformation presentationInformation = new PresentationInformation(CheckType.ObserverPattern);
+        this.classes = data.getClasses();
 
         for (ClassAdapter classAdapter : classes){
             boolean isAbstract = classAdapter.getIsAbstract();
             boolean isInterface = classAdapter.getIsInterface();
             if(isAbstract || isInterface) {
                 subject = classAdapter;
-                for (FieldAdapter fieldAdapter : classAdapter.getAllFields()){
-                    if(fieldAdapter.isList()) {
-                        String fieldType = fieldAdapter.getCollectionType();
-                        observer = findObserver(fieldType);
-                        if (observer != null) {
-                            for (ClassAdapter classNode : classes) {
-                                findConcreteObserver(classNode);
-                                findConcreteSubject(classNode);
-                            }
-                            if (concObserver != null && concSubject != null) {
-                                presentationInformation.passed = true;
-                                displayLines.add("Observer Pattern has been detected: \n"
-                                        + "\t Subject: " + subject.getClassName() + " | Observer: " + observer.getClassName() + "\n"
-                                        + "\t Concrete Subject: " + concSubject.getClassName() + " | Concrete Observer: " + concObserver.getClassName());
-                            }
-                        }
-                    }
+                checkFieldsForPattern(presentationInformation, classAdapter);
+            }
+        }
+
+        return presentationInformation;
+    }
+
+    private void checkFieldsForPattern(PresentationInformation presentationInformation, ClassAdapter classAdapter) {
+        for (FieldAdapter fieldAdapter : classAdapter.getAllFields()){
+            if(fieldAdapter.isList()) {
+                String fieldType = fieldAdapter.getCollectionType();
+                observer = findObserver(fieldType);
+                if (observer != null) {
+                    findConcreteImplementations(presentationInformation);
                 }
             }
         }
-        presentationInformation.displayLines = displayLines;
-        return presentationInformation;
+    }
+
+    private void findConcreteImplementations(PresentationInformation presentationInformation) {
+        for (ClassAdapter classNode : classes) {
+            findConcreteObserver(classNode);
+            findConcreteSubject(classNode);
+        }
+        if (concObserver != null && concSubject != null) {
+            presentationInformation.passedCheck();
+            presentationInformation.addDisplayLine("Observer Pattern has been detected: \n"
+                    + "\t Subject: " + subject.getClassName() + " | Observer: " + observer.getClassName() + "\n"
+                    + "\t Concrete Subject: " + concSubject.getClassName() + " | Concrete Observer: " + concObserver.getClassName());
+        }
     }
 
     private void findConcreteSubject(ClassAdapter classNode) {
