@@ -40,8 +40,8 @@ public class ConsoleUI extends UI {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
         System.out.println("What checks would you like to perform?");
-        for (int i = 0; i < this.availibleChecks.size(); i++){
-            System.out.println((i + 1) + ". " + this.availibleChecks.get(i).toString());
+        for (int i = 0; i < availableChecks.size(); i++){
+            System.out.println((i + 1) + ". " + availableChecks.get(i).toString());
         }
         System.out.println("Example answer: 1,3,2");
         try {
@@ -53,7 +53,7 @@ public class ConsoleUI extends UI {
             }
             ArrayList<CheckType> checksToPerformTypes = new ArrayList<>();
             for (Integer checkToPerformInt : intChecksToPerform){
-                checksToPerformTypes.add(this.availibleChecks.get(checkToPerformInt));
+                checksToPerformTypes.add(availableChecks.get(checkToPerformInt));
             }
             UserOptions userOptions = getUserOptions(reader);
             System.out.println("Please enter the full file path to the directory which contains the class files you would like to lint?");
@@ -76,7 +76,7 @@ public class ConsoleUI extends UI {
     protected UserOptions getUserOptions(BufferedReader reader) throws IOException {
         UserOptions userOptions = new UserOptions();
 
-        if (availibleChecks.contains(CheckType.SingleResponsibilityPrinciple)){
+        if (availableChecks.contains(CheckType.SingleResponsibilityPrinciple)){
             System.out.println("You have selected to check for the Single Responsibility Principle, what would you like to set as your maximum amount of public methods?");
             System.out.println("You may enter a number or simply enter \"default\"");
             String maximumMethods = reader.readLine();
@@ -85,7 +85,7 @@ public class ConsoleUI extends UI {
             }
         }
 
-        if(availibleChecks.contains(CheckType.PoorNamingConvention)){
+        if(availableChecks.contains(CheckType.PoorNamingConvention)){
             System.out.println("You have selected to check that your project follows Standard Naming Conventions, would you like to autocorrect the names of classes/fields/methods?");
             System.out.println("Please enter yes or no");
             String stnReader = reader.readLine();
