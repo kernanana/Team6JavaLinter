@@ -16,10 +16,9 @@ public class Linter {
     private List<ClassAdapter> classAdapters;
     private PlantClassUMLParser umlParser;
 
-    public Linter(Map<CheckType, Check> checkComposition, ProjectDataManager projectDataManager, PlantClassUMLParser umlParser){
+    public Linter(ProjectDataManager projectDataManager, PlantClassUMLParser umlParser){
         this.umlParser = umlParser;
         this.projectDataManager = projectDataManager;
-        this.checkComposition = checkComposition;
     }
 
     public List<PresentationInformation> runChecks(List<CheckType> checksToRun, String filePath, UserOptions userOptions){
@@ -35,4 +34,7 @@ public class Linter {
         return presentationInformations;
     }
 
+    public void defineAvailableChecks(Map<CheckType, Check> checkComposition) {
+        this.checkComposition = checkComposition;
+    }
 }
