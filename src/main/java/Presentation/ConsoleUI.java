@@ -11,19 +11,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class ConsoleUI {
+public class ConsoleUI extends UI {
 
-    Linter linter;
-    List<CheckType> availibleChecks;
-    Map<String, Object> config;
-
-    public ConsoleUI(Linter linter, List<CheckType> availibleChecks, Map<String, Object> config){
-        this.linter = linter;
-        this.availibleChecks = availibleChecks;
-        this.config = config;
+    public ConsoleUI(Linter linter, Map<String, Object> config){
+        super(linter, config);
     }
 
     protected void initializeAvailableChecks() {

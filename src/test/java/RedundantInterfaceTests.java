@@ -1,6 +1,7 @@
 import DataSource.DefaultDataLoader;
 import Domain.ASMProjectDataManager;
 import Domain.Checks.Check;
+import Domain.Checks.CheckData;
 import Domain.Checks.DecoratorPatternCheck;
 import Domain.Checks.RedundantInterface;
 import Domain.PresentationInformation;
@@ -16,9 +17,10 @@ public class RedundantInterfaceTests {
         Check redundantInterfaceCheck = new RedundantInterface();
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        PresentationInformation result = redundantInterfaceCheck.check(projectDataManager.generateClassAdapters("./src/test/resources/RedundantInterface"), new UserOptions());
-        Assertions.assertFalse(result.passed); // Says that pattern was detected
-        Assertions.assertEquals("Class ASMPracticeCode/RedundantInterface/RedundantInterface both inherits and implements method \"void methodE()\" from class ASMPracticeCode/RedundantInterface/ValidClass and interface ASMPracticeCode/RedundantInterface/TestInterfaceD", result.displayLines.get(0)); //displays correct informaiton
+        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/RedundantInterface"), new UserOptions());
+        PresentationInformation result = redundantInterfaceCheck.check(checkData);
+        Assertions.assertFalse(result.hasPassed()); // Says that pattern was detected
+        Assertions.assertEquals("Class ASMPracticeCode/RedundantInterface/RedundantInterface both inherits and implements method \"void methodE()\" from class ASMPracticeCode/RedundantInterface/ValidClass and interface ASMPracticeCode/RedundantInterface/TestInterfaceD", result.getDisplayLines().get(0)); //displays correct informaiton
     }
 
     @Test
@@ -26,8 +28,9 @@ public class RedundantInterfaceTests {
         Check redundantInterfaceCheck = new RedundantInterface();
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        PresentationInformation result = redundantInterfaceCheck.check(projectDataManager.generateClassAdapters("./src/test/resources/DecoratorPatternDummyData/DecoratorPatternHasPattern"), new UserOptions());
-        Assertions.assertTrue(result.passed); // Says that pattern was detected
+        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/DecoratorPatternDoesntExtend"), new UserOptions());
+        PresentationInformation result = redundantInterfaceCheck.check(checkData);
+        Assertions.assertTrue(result.hasPassed()); // Says that pattern was detected
     }
 
 }

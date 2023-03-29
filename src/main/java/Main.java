@@ -1,6 +1,8 @@
 import DataSource.*;
 import Domain.*;
 import Presentation.ConsoleUI;
+import Presentation.UI;
+import java.util.Map;
 
 public class Main {
 
@@ -11,7 +13,8 @@ public class Main {
         ProjectDataManager projectDataManager = new ASMProjectDataManager(new DefaultDataLoader());
         PlantClassUMLParser umlParser = new PlantClassUMLParser(new PlantUMLSourceStringReader(new SourceStringReaderCreator()), new PrintWriterUMLTextWriter());
         Linter linter = new Linter(projectDataManager, umlParser);
-        ConsoleUI ui = new ConsoleUI(linter, availableChecks, config);
+        UI ui = new ConsoleUI(linter, config);
         ui.UIMain();
     }
+
 }

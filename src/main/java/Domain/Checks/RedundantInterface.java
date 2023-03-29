@@ -12,21 +12,18 @@ import java.util.List;
 public class RedundantInterface implements Check {
 
     @Override
-    public PresentationInformation check(List<ClassAdapter> classes, UserOptions userOptions) {
-        PresentationInformation presentationInformation = new PresentationInformation();
-        presentationInformation.checkName = CheckType.RedundantInterface;
-        ArrayList<String> displayLines = new ArrayList<>();
-        presentationInformation.passed = true;
+    public PresentationInformation check(CheckData checkData) {
+        PresentationInformation presentationInformation = new PresentationInformation(CheckType.RedundantInterface);
+        presentationInformation.passedCheck();
         
-        for (ClassAdapter classAdapter : classes){
-            checkClass(classes, presentationInformation, displayLines, classAdapter);
+        for (ClassAdapter classAdapter : checkData.getClasses()){
+            checkClass(checkData.getClasses(), presentationInformation, classAdapter);
         }
-        
-        presentationInformation.displayLines = displayLines;
+
         return presentationInformation;
     }
 
-    private static void checkClass(List<ClassAdapter> classes, PresentationInformation presentationInformation, ArrayList<String> displayLines, ClassAdapter classAdapter) {
+    private void checkClass(List<ClassAdapter> classes, PresentationInformation presentationInformation, ClassAdapter classAdapter) {
 
         if((classAdapter.getIsInterface() || classAdapter.getIsAbstract()) || classAdapter.getInterfaces().size() == 0) {
             return;
@@ -43,8 +40,8 @@ public class RedundantInterface implements Check {
                 for(MethodAdapter interfaceMethodData : interfaceClass.getAllMethods()) {
                     for(MethodAdapter classMethodData : cd.getAllMethods()) {
                         if(interfaceMethodData.getSignature().equals(classMethodData.getSignature())) {
-                            presentationInformation.passed = false;
-                            displayLines.add("Class " + classAdapter.getClassName() + " both inherits and implements method \"" + classMethodData.getSignature() + "\" from class " + cd.getClassName() +
+                            presentationInformation.failedCheck();
+                            presentationInformation.addDisplayLine("Class " + classAdapter.getClassName() + " both inherits and implements method \"" + classMethodData.getSignature() + "\" from class " + cd.getClassName() +
                                     " and interface " + interfaceClass.getClassName());
                         }
                     }
