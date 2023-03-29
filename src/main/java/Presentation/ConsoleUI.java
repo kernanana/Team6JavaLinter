@@ -9,15 +9,18 @@ import Domain.UserOptions;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-public class ConsoleUI extends UI{
+public class ConsoleUI extends UI {
 
-    public ConsoleUI(Linter linter) {
-        super(linter);
+    public ConsoleUI(Linter linter, Map<String, Object> config){
+        super(linter, config);
     }
 
-    @Override
     protected void initializeAvailableChecks() {
         registerCheck(CheckType.PoorNamingConvention, new NamingConventionCheck());
         registerCheck(CheckType.EqualsHashCode, new EqualsHashCodeCheck());
@@ -28,19 +31,17 @@ public class ConsoleUI extends UI{
         registerCheck(CheckType.StrategyPattern, new StrategyPatternCheck());
     }
 
-    @Override
     protected void registerCheck(CheckType checkType, Check check) {
         availableChecks.add(checkType);
         checkComposition.put(checkType, check);
     }
 
-    @Override
     public void UIMain() {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
         System.out.println("What checks would you like to perform?");
         for (int i = 0; i < this.availibleChecks.size(); i++){
-            System.out.println(Integer.toString(i + 1) + ". " + this.availibleChecks.get(i).toString());
+            System.out.println((i + 1) + ". " + this.availibleChecks.get(i).toString());
         }
         System.out.println("Example answer: 1,3,2");
         try {
@@ -57,7 +58,13 @@ public class ConsoleUI extends UI{
             UserOptions userOptions = getUserOptions(reader);
             System.out.println("Please enter the full file path to the directory which contains the class files you would like to lint?");
             System.out.println("Notice: all class files in given directory will be linted, if you only want to lint a subset use a more specific directory.");
-            String filepath = reader.readLine();
+
+            String filepath;
+            if(config.containsKey("directory"))
+                filepath = (String) config.get("directory");
+            else
+                filepath = reader.readLine();
+
             ArrayList<PresentationInformation> presentationInformations = (ArrayList<PresentationInformation>) linter.runChecks(checksToPerformTypes, filepath, userOptions);
             this.displayResults(presentationInformations);
 
@@ -66,7 +73,6 @@ public class ConsoleUI extends UI{
         }
     }
 
-    @Override
     protected UserOptions getUserOptions(BufferedReader reader) throws IOException {
         UserOptions userOptions = new UserOptions();
 

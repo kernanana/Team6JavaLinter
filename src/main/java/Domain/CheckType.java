@@ -6,5 +6,5 @@ import Domain.Checks.NamingConventionCheck;
 public enum CheckType {
     PoorNamingConvention,NoFinalizerCheck, EqualsHashCode, InformationHidingViolation,
     HollywoodPrinciple,SingleResponsibilityPrinciple,SingletonPattern,StrategyPattern,
-    DecoratorPattern,ObserverPattern
+    DecoratorPattern, RedundantInterface, ObserverPattern
 }

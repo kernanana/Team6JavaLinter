@@ -17,9 +17,11 @@ public abstract class UI {
     protected List<CheckType> availibleChecks;
     protected static final List<CheckType> availableChecks = new ArrayList<>();
     protected static final Map<CheckType, Check> checkComposition = new HashMap<>();
+    protected Map<String, Object> config;
 
-    public UI (Linter linter){
+    public UI (Linter linter, Map<String, Object> config){
         this.linter = linter;
+        this.config = config;
         initializeAvailableChecks();
         linter.defineAvailableChecks(checkComposition);
     }
