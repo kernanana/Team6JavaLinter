@@ -3,6 +3,7 @@ import Domain.ASMProjectDataManager;
 import Domain.Adapters.ClassAdapter;
 import Domain.CheckType;
 import Domain.Checks.Check;
+import Domain.Checks.CheckData;
 import Domain.Checks.StrategyPatternCheck;
 import Domain.PresentationInformation;
 import Domain.ProjectDataManager;
@@ -32,13 +33,14 @@ public class StrategyPatternTests {
         adapterList.add(adapter2);
         adapterList.add(adapter3);
         Check check = new StrategyPatternCheck();
-        PresentationInformation info = check.check(adapterList, null);
-        Assertions.assertTrue(info.passed);
-        Assertions.assertEquals(CheckType.StrategyPattern, info.checkName);
+        CheckData checkData = new CheckData(adapterList, null);
+        PresentationInformation info = check.check(checkData);
+        Assertions.assertTrue(info.hasPassed());
+        Assertions.assertEquals(CheckType.StrategyPattern, info.getCheckName());
 //        String str = "Strategy Pattern Detected!";
 //        Assertions.assertEquals(str, info.displayLines.get(0));
         String str2 = "Strategy Abstraction Class: ASMPracticeCode/StrategyDummyData/StrategyInterface, Concrete Strategy Classes: ASMPracticeCode/StrategyDummyData/ConcreteStrategy, ASMPracticeCode/StrategyDummyData/ConcreteStrategy1";
-        Assertions.assertEquals(str2, info.displayLines.get(0));
+        Assertions.assertEquals(str2, info.getDisplayLines().get(0));
     }
 
     @Test
@@ -50,9 +52,10 @@ public class StrategyPatternTests {
         adapterList.add(adapter);
         adapterList.add(adapter2);
         Check check = new StrategyPatternCheck();
-        PresentationInformation info = check.check(adapterList, null);
-        Assertions.assertFalse(info.passed);
-        Assertions.assertEquals(CheckType.StrategyPattern, info.checkName);
-        Assertions.assertEquals(0, info.displayLines.size());
+        CheckData checkData = new CheckData(adapterList, null);
+        PresentationInformation info = check.check(checkData);
+        Assertions.assertFalse(info.hasPassed());
+        Assertions.assertEquals(CheckType.StrategyPattern, info.getCheckName());
+        Assertions.assertEquals(0, info.getDisplayLines().size());
     }
 }

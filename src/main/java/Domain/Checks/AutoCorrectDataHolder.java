@@ -8,43 +8,27 @@ import java.util.Map;
 
 public class AutoCorrectDataHolder {
     private List<ClassAdapter> classNames;
-    private List<String> badClassNames;
-    private Map<ClassAdapter, List<FieldAdapter>> badFieldNames;
-    private Map<ClassAdapter, List<FieldAdapter>> badFinalFieldNames;
-    private Map<ClassAdapter, List<MethodAdapter>> badMethodNames;
+    private BadNames badNames;
 
-    AutoCorrectDataHolder(List<ClassAdapter> classNames, List<String> badClassNames, Map<ClassAdapter, List<FieldAdapter>> badFieldNames,
-                          Map<ClassAdapter, List<FieldAdapter>> badFinalFieldNames, Map<ClassAdapter, List<MethodAdapter>> badMethodNames){
+    AutoCorrectDataHolder(List<ClassAdapter> classNames, BadNames badNames){
         this.classNames = classNames;
-        this.badClassNames = badClassNames;
-        this.badFieldNames = badFieldNames;
-        this.badFinalFieldNames = badFinalFieldNames;
-        this.badMethodNames = badMethodNames;
+        this.badNames = badNames;
         verifyDataFormat();
     };
 
     public Map<ClassAdapter, List<FieldAdapter>> getBadFields(){
-        return badFieldNames;
+        return badNames.getBadFields();
     }
 
     public Map<ClassAdapter, List<MethodAdapter>> getBadMethodNames(){
-        return badMethodNames;
+        return badNames.getBadMethods();
     }
 
     public  boolean areThereClassNameViolations(){
-        if(badClassNames.isEmpty()){
-            return true;
-        }
-        return false;
+        return badNames.hasClassNameViolations();
     }
 
     public boolean verifyDataFormat(){
-//        if(classNames.size()){
-//
-//        }
-        if(classNames.size() == badClassNames.size()){
-            return true;
-        }
-        return false;
+        return classNames.size() == badNames.getNumberOfBadClassNames();
     }
 }
