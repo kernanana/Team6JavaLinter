@@ -8,4 +8,6 @@ public interface FieldAdapter {
     public abstract String getType();
     public abstract boolean getIsStatic();
     public abstract boolean getIsProtected();
+    public abstract boolean isList();
+    public abstract String getCollectionType();
 }
