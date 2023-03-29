@@ -29,6 +29,7 @@ public class ConsoleUI extends UI {
         registerCheck(CheckType.SingletonPattern, new SingletonPatternCheck());
         registerCheck(CheckType.DecoratorPattern, new DecoratorPatternCheck());
         registerCheck(CheckType.StrategyPattern, new StrategyPatternCheck());
+        registerCheck(CheckType.DataClass, new DataClassCheck());
     }
 
     protected void registerCheck(CheckType checkType, Check check) {
@@ -77,7 +78,7 @@ public class ConsoleUI extends UI {
         UserOptions userOptions = new UserOptions();
 
         if (availableChecks.contains(CheckType.SingleResponsibilityPrinciple)){
-            System.out.println("You have selected to check for the Single Responsibility Principle, what would you like to set as your maximum amount of public methods?");
+            System.out.println("If you have selected the Single Responsibility Principle, what would you like to set as your maximum amount of public methods?");
             System.out.println("You may enter a number or simply enter \"default\"");
             String maximumMethods = reader.readLine();
             if (!maximumMethods.toLowerCase().trim().equals("default")){
@@ -86,7 +87,7 @@ public class ConsoleUI extends UI {
         }
 
         if(availableChecks.contains(CheckType.PoorNamingConvention)){
-            System.out.println("You have selected to check that your project follows Standard Naming Conventions, would you like to autocorrect the names of classes/fields/methods?");
+            System.out.println("If you have selected Standard Naming Conventions, would you like to autocorrect the names of classes/fields/methods?");
             System.out.println("Please enter yes or no");
             String stnReader = reader.readLine();
             if(stnReader.toLowerCase().trim().equals("yes")){
@@ -95,6 +96,12 @@ public class ConsoleUI extends UI {
                 System.out.println("Invalid input, autocorrect is not enabled");
             }
         }
+
+        System.out.println("Would you like to generate output in a txt file? (yes or no)");
+        if(reader.readLine().toLowerCase().equals("yes")){
+            userOptions.saveOutput("");
+        }
+
         System.out.println("Would you like to generate a uml? (yes or no)");
         if (reader.readLine().toLowerCase().equals("yes")){
             System.out.println("What is the directory you would like the uml image and text to be outputted to? Please enter the full file path.");
