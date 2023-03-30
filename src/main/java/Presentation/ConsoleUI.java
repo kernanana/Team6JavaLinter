@@ -30,6 +30,8 @@ public class ConsoleUI extends UI {
         registerCheck(CheckType.DecoratorPattern, new DecoratorPatternCheck());
         registerCheck(CheckType.StrategyPattern, new StrategyPatternCheck());
         registerCheck(CheckType.DataClass, new DataClassCheck());
+        registerCheck(CheckType.ObserverPattern, new ObserverPatternCheck());
+        registerCheck(CheckType.RedundantInterface, new RedundantInterface());
     }
 
     protected void registerCheck(CheckType checkType, Check check) {
