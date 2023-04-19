@@ -99,8 +99,11 @@ public class HollywoodPrincipleCheck implements Check{
     }
 
     private String convertTypeToName(String type){
-        String temp = type.substring(1, type.length() - 1);
-        String temp1 = temp.replaceAll("\\.", "/");
-        return temp1;
+        if(type.length() > 1) {
+            String temp = type.substring(1, type.length() - 1);
+            String temp1 = temp.replaceAll("\\.", "/");
+            return temp1;
+        }
+        return "";
     }
 }

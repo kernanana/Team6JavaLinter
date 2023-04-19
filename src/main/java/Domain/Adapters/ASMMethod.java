@@ -72,10 +72,12 @@ public class ASMMethod implements MethodAdapter{
     @Override
     public boolean isSetter() {
         List<Integer> op = getInstOpCodes();
-        if(op.get(2) == Opcodes.ALOAD || op.get(2) == Opcodes.ILOAD){
-            if (op.get(3) == Opcodes.ALOAD || op.get(3) == Opcodes.ILOAD){
-                if (op.get(4) == Opcodes.PUTFIELD){
-                    return true;
+        if(op.size() >= 4) {
+            if (op.get(2) == Opcodes.ALOAD || op.get(2) == Opcodes.ILOAD) {
+                if (op.get(3) == Opcodes.ALOAD || op.get(3) == Opcodes.ILOAD) {
+                    if (op.get(4) == Opcodes.PUTFIELD) {
+                        return true;
+                    }
                 }
             }
         }
@@ -95,10 +97,12 @@ public class ASMMethod implements MethodAdapter{
     @Override
     public boolean isGetter() {
         List<Integer> op = getInstOpCodes();
-        if(op.get(2) == Opcodes.ALOAD){
-            if(op.get(3) == Opcodes.GETFIELD){
-                if(op.get(4) == Opcodes.ARETURN || op.get(4) == Opcodes.IRETURN || op.get(4) == Opcodes.RETURN || op.get(4) == Opcodes.FRETURN || op.get(4) == Opcodes.DRETURN || op.get(4) == Opcodes.LRETURN){
-                    return true;
+        if(op.size() >= 4) {
+            if (op.get(2) == Opcodes.ALOAD) {
+                if (op.get(3) == Opcodes.GETFIELD) {
+                    if (op.get(4) == Opcodes.ARETURN || op.get(4) == Opcodes.IRETURN || op.get(4) == Opcodes.RETURN || op.get(4) == Opcodes.FRETURN || op.get(4) == Opcodes.DRETURN || op.get(4) == Opcodes.LRETURN) {
+                        return true;
+                    }
                 }
             }
         }
