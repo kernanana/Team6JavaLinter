@@ -17,7 +17,7 @@ public class GUITests {
         String configPath = "./src/test/resources/test-config.yaml";
         Map<String, Object> config = new ConfigParser().parseConfig(configPath);
         ProjectDataManager projectDataManager = new ASMProjectDataManager(new DefaultDataLoader());
-        PlantClassUMLParser umlParser = new PlantClassUMLParser(new PlantUMLSourceStringReader(new SourceStringReaderCreator()), new PrintWriterUMLTextWriter());
+        PlantClassUMLParser umlParser = new PlantClassUMLParser(new PlantUMLSourceStringReader(), new PrintWriterUMLTextWriter());
         Linter linter = new Linter(projectDataManager, umlParser);
         GUI gui = new GUI(linter, config);
         gui.createChecksForUI(new JPanel());
@@ -37,7 +37,7 @@ public class GUITests {
         String configPath = "./src/test/resources/test-config.yaml";
         Map<String, Object> config = new ConfigParser().parseConfig(configPath);
         ProjectDataManager projectDataManager = new ASMProjectDataManager(new DefaultDataLoader());
-        PlantClassUMLParser umlParser = new PlantClassUMLParser(new PlantUMLSourceStringReader(new SourceStringReaderCreator()), new PrintWriterUMLTextWriter());
+        PlantClassUMLParser umlParser = new PlantClassUMLParser(new PlantUMLSourceStringReader(), new PrintWriterUMLTextWriter());
         Linter linter = new Linter(projectDataManager, umlParser);
         GUI gui = new GUI(linter, config);
         gui.createChecksForUI(new JPanel());
@@ -54,7 +54,7 @@ public class GUITests {
         String configPath = "./src/test/resources/test-config.yaml";
         Map<String, Object> config = new ConfigParser().parseConfig(configPath);
         ProjectDataManager projectDataManager = new ASMProjectDataManager(new DefaultDataLoader());
-        PlantClassUMLParser umlParser = new PlantClassUMLParser(new PlantUMLSourceStringReader(new SourceStringReaderCreator()), new PrintWriterUMLTextWriter());
+        PlantClassUMLParser umlParser = new PlantClassUMLParser(new PlantUMLSourceStringReader(), new PrintWriterUMLTextWriter());
         Linter linter = new Linter(projectDataManager, umlParser);
         GUI gui = new GUI(linter, config);
         gui.createChecksForUI(new JPanel());
