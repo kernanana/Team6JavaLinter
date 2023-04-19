@@ -1,0 +1,439 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package DataSource{
+    interface DataLoader{
+    +{abstract} loadFileBytes(String name): byte[]
+    }
+    class DefaultDataLoader{
+    +{method} loadFileBytes(String name): byte[]
+    }
+    interface UMLTextWriter{
+    +{abstract} writeUMLText(String filepath, String umltext): void
+    }
+    abstract class SourceStringReaderAdapter{
+    +{abstract} generateImage(String source, File outputFile): void
+    }
+    class PrintWriterUMLTextWriter {
+    +{method} writeUMLText(String filepath, String umltext): void
+    }
+    class PlantUMLSourceStringReader {
+    +{method} generateImage(String source, File outputFile): void
+    }
+    class ConcreteClassLoader{
+        +{method} defineClass(String name, byte[] b): class
+    }
+    class ASMClassWriterFacade{
+        -{field} ASMFieldVisitor: ASMFieldVisitor
+        -{field} String: className
+        -{field} ClassReader: reader
+        -{field} ClassWriter: writer
+        +{method} addField(String fieldName, int accessOpcode): byte[]
+        +{method} publicizeMethod(): byte[]
+    }
+    PlantUMLSourceStringReader --|> SourceStringReaderAdapter
+    PrintWriterUMLTextWriter --|> UMLTextWriter
+}
+
+
+
+
+package Domain{
+    package Adapters{
+        interface ClassAdapter{
+            +{abstract} getClassName(): String
+            +{abstract} getIsPublic(): boolean
+            +{abstract} getExtends(): String
+            +{abstract} getInterfaces(): List<String>
+            +{abstract} getAllMethods(): List<MethodAdapter>
+            +{abstract} getAllFields(): List<FieldAdapter>
+            +{abstract} matchesClassName(String name): boolean
+            +{abstract} getIsAbstract(): boolean
+            +{abstract} getIsInterface(): boolean
+            +{abstract} getIsEnum(): boolean
+            +{abstract} removeField(String name): boolean
+        }
+
+        class ASMClass{
+            -{field} final node: ClassNode
+            +{method} getClassName(): String
+            +{method} getIsPublic(): boolean
+            +{method} getExtends(): String
+            +{method} getInterfaces(): List<String>
+            +{method} getAllMethods(): List<MethodAdapter>
+            +{method} getAllFields(): List<FieldAdapter>
+            +{method} matchesClassName(String name): boolean
+            +{method} getIsAbstract(): boolean
+            +{method} getIsInterface(): boolean
+            +{method} getIsEnum(): boolean
+            +{method} removeField(String name): boolean
+        }
+        interface FieldAdapter{
+            +{abstract} getFieldName(): String
+            +{abstract} getIsPublic(): boolean
+            +{abstract} getIsFinal(): boolean
+            +{abstract} getType(): String
+            +{abstract} getIsStatic(): boolean
+            +{abstract} getIsProtected(): boolean
+        }
+        class ASMField{
+            -{field} final node: FieldNode
+            +{method} getFieldName(): String
+            +{method} getIsPublic(): boolean
+            +{method} getIsFinal(): boolean
+            +{method} getType(): String
+            +{method} getIsStatic(): boolean
+            +{method} getIsProtected(): boolean
+        }
+        interface MethodAdapter{
+            +{abstract} getMethodName(): String
+            +{abstract} getIsPublic(): boolean
+            +{abstract} getReturnType(): boolean
+            +{abstract} getArgTypes(): List<String>
+            +{abstract} isStatic(): boolean
+            +{abstract} getInstructions(): List<String>
+            +{abstract} getInstOpCodes(): List<Integer>
+            +{abstract} isGetter(): boolean
+            +{abstract} isSetter(): boolean
+            +{abstract} getIsAbstract(): boolean
+            +{abstract} getIsPrivate(): boolean
+        }
+        class ASMMethod{
+            -{field} final node: MethodNode
+            +{method} getMethodName(): String
+            +{method} getIsPublic(): boolean
+            +{method} getReturnType(): boolean
+            +{method} getArgTypes(): List<String>
+            +{method} isStatic(): boolean
+            +{method} getInstructions(): List<String>
+            +{method} getInstOpCodes(): List<Integer>
+            +{method} isGetter(): boolean
+            +{method} isSetter(): boolean
+            +{method} getIsAbstract(): boolean
+            +{method} getIsPrivate(): boolean
+        }
+
+
+
+        class ASMFieldVisitor{
+            -{field} String: fieldName
+            -{field} String: fieldDefault
+            -{field} int: access
+            -{field} boolean: isFieldPresent
+            +{method} visitField(int access, String name, String desc, String signature, Object value): FieldVisitor
+            +{method} visitEnd(): void
+        }
+
+        note left: for testing only
+
+        ASMClass .down.> ASMClassWriterFacade
+        ASMClass ..> ConcreteClassLoader
+        ASMField ..> ASMFieldVisitor
+    }
+
+
+    package Checks{
+
+        interface Check {
+            +{abstract} check(CheckData data): PresentationInformation
+        }
+        note left
+        To make the UML more readable and simplify the dependency arrows we have the Check
+        Interface depending on MethodAdapter and FieldAdapter directly instead of each
+        subclass depending on them individually.
+        end note
+        class CheckData {
+            -{field} List<ClassAdapter> classes
+            -{field} UserOptions userOptions
+            +{method} getClasses(): List<ClassAdapter>
+            +{method} getUserOptions(): UserOptions
+            +{method} hasUserOptions(): boolean
+        }
+        class ObserverPatternCheck{
+        private MethodAdapter observerMethod;
+            private List<ClassAdapter>
+            private ClassAdapter subject
+            private ClassAdapter observer
+            private ClassAdapter concSubject
+            private ClassAdapter concObserver
+            public PresentationInformation check(CheckData data)
+            private void checkFieldsForPattern(PresentationInformation presentationInformation, ClassAdapter classAdapter)
+            private void findConcreteImplementations(PresentationInformation presentationInformation)
+            private void findConcreteSubject(ClassAdapter classNode)
+            private ClassAdapter findObserver(String observerName)
+            private void findConcreteObserver(ClassAdapter classNode)
+        }
+        class DecoratorPatternCheck{
+            +{method} check(CheckData data): PresentationInformation
+            -{method} parseType(String type): String
+            -{method} parseExtendedClass(String extendedClass): String
+        }
+        class EqualsHashCodeCheck{
+            +{method} check(CheckData data): PresentationInformation
+        }
+        class HollywoodPrincipleCheck{
+            +{method} check(CheckData data): PresentationInformation
+            -{method} formatLine(ClassAdapter highLevelClass, ClassAdapter lowLevelClass): String
+            -{method} checkDependsOn(ClassAdapter highLevelClass, ClassAdapter lowLevelClass): boolean
+            -{method} checkAllInstructionsForDependency(String className, List<String> instructions): boolean
+            -{method} getHighLevelClass(ClassAdapter lowLevelClass, List<ClassAdapter> allClasses): ClassAdapter
+            -{method} getHighLevelClasses(ClassAdapter lowLevelClass, List<ClassAdapter> allClasses):  List<ClassAdapter>
+            -{method} convertTypeToName(String type): String
+        }
+        class InformationHidingCheck{
+            +{method} check(CheckData data): PresentationInformation
+        }
+        class AutoCorrectDataHolder{
+            -classNames: List<ClassAdapter>
+            -badNames: BadNames
+            +Map<ClassAdapter, List<FieldAdapter>> getBadFields()
+            +Map<ClassAdapter, List<MethodAdapter>> getBadMethodNames()
+            +boolean areThereClassNameViolations()
+            +boolean verifyDataFormat()
+        }
+        class NamingConventionAutoCorrect {
+            +{method} PresentationInformation autoCorrect(AutoCorrectDataHolder data, PresentationInformation pi)
+        }
+        class DataClassCheck{
+            +{method} check(CheckData data): PresentationInformation
+            +{method} boolean checkIfAllGettersAndSetters(List<MethodAdapter> methods)
+        }
+        class NamingConventionCheck {
+            +{method} check(CheckData data): PresentationInformation
+            +{method} PresentationInformation tryAutoCorrect(List<ClassAdapter> classes, BadNames badNames, PresentationInformation presentationInformation)
+        }
+        class NoFinalizerCheck {
+            +{method} check(CheckData data): PresentationInformation
+            -{method} lookForFinalize(ClassAdapter classAdapter): boolean
+        }
+        class SingleResponsibilityPrincipleCheck {
+            +{method} check(CheckData data): PresentationInformation
+        }
+        class SingletonPatternCheck {
+            +{method} check(CheckData data): PresentationInformation
+        }
+        class StrategyPatternCheck {
+            +{method} check(CheckData data): PresentationInformation
+            -{method} formatDisplayLine(ClassAdapter abstractStrategy, List<ClassAdapter> concreteStrategies): String
+            -{method} findLowerLevelClasses(ClassAdapter strategyClass, List<ClassAdapter> classes): List<ClassAdapter>
+            -{method} allClassesThatExtend(String className, List<ClassAdapter> classes): List<ClassAdapter>
+            -{method} allClassesThatImplement(String className, List<ClassAdapter> classes): List<ClassAdapter>
+        }
+
+        class BadNames {
+            private final List<String> badClassNames
+            private final Map<ClassAdapter, List<FieldAdapter>> badFieldNameMap
+            private final Map<ClassAdapter, List<FieldAdapter>> badFinalFieldNameMap
+            private final Map<ClassAdapter, List<MethodAdapter>> badMethodNameMap
+            private ClassAdapter currentAdapter
+            private List<FieldAdapter> currentFields
+            private List<FieldAdapter> currentFinalFields
+            private List<MethodAdapter> currentMethods
+
+            public BadNames()
+            public void addBadClassName(String className)
+            public void addBadMethodName(MethodAdapter method)
+            public void addBadFieldName(FieldAdapter field, boolean isFinal)
+            public void changeClassAdapter(ClassAdapter newAdapter)
+            public boolean hasClassNameViolations()
+            public Map<ClassAdapter, List<FieldAdapter>> getBadFields()
+            public Map<ClassAdapter, List<MethodAdapter>> getBadMethods()
+            public int getNumberOfBadClassNames()
+            private void saveCurrentAdapterData()
+        }
+    }
+
+    enum CheckType{
+        PoorNamingConvention
+        NoFinalizerCheck
+        EqualsHashCode
+        InformationHidingViolation
+        HollywoodPrinciple
+        SingleResponsibilityPrinciple
+        SingletonPattern
+        StrategyPattern
+        DecoratorPattern
+    }
+
+    class UserOptions {
+        -{field} maximumMethods: int
+        -{field} umlOutputDirectory:String
+        -{field} parseUml: boolean
+        -{field} namingConventionAutoCorrect: boolean
+        public void defineMaxMethods(int max)
+        public void doAutoCorrect()
+        public void doUMLParse(String outputDirectory)
+        public void saveOutput(String outputDirectory)
+        public boolean hasUMLParse()
+        public boolean hasAutoCorrect()
+        public boolean maxMethodsIsDefined()
+        public int getMaximumMethods()
+        public String getUmlOutputDirectory()
+        public boolean hasSaveOutPut()
+    }
+
+    class PresentationInformation{
+        -{field} passed: boolean
+        -{field} checkName: CheckType
+        -{field} displayLines: List<String>
+        +boolean reinitialize(CheckType check)
+        +boolean resetPI()
+        +int countDisplayLines()
+        +boolean isPresentingCheck(CheckType check)
+        +String returnUIMessage()
+        +void addDisplayLine(String displayLine)
+    }
+
+    class ASMProjectDataManager{
+        +{method} createClassAdapter(String path): ClassAdapter
+    }
+
+    abstract class ProjectDataManager {
+        -{field} dataLoader: DataLoader
+        +{method} generateClassAdapters(String filepath): List<ClassAdapter>
+        +{abstract} createClassAdapter(String path): ClassAdapter
+    }
+
+    class Linter {
+        -{field} ProjectDataManager
+        -{field} Map<CheckType, Check>
+        -{field} List<ClassAdapter>
+        -{field} UMLParser
+        +{method} runChecks(List<CheckType> checksToRun, String filePath, UserOptions userOptions): List<PresentationInformation>
+    }
+
+    class PlantClassUMLParser {
+    -{field} SourceStringReaderAdapter
+    -{field} UMLTextWriter
+    +{method} parseUML(List<ClassAdapter> classes, String outPutFilePath): String
+    }
+
+    abstract class UMLParser {
+    +{abstract} parseUML(List<ClassAdapter> classes, String outPutFilePath): String
+    }
+}
+
+
+
+
+package Presentation {
+    abstract class UI {
+        -{field} Linter
+        -{field} List<CheckType>
+        +{abstract} UIMain(): void
+        +{abstract} initializeAvailableChecks():void
+        +{abstract} registerCheck(CheckType checkType, Check check): void
+        +{abstract} getUserOptions(): UserOptions
+    }
+    class ConsoleUI {
+        +{method} UIMain(): void
+        -{method} getUserOptions(ArrayList<CheckType> checksToPerformTypes, BufferedReader reader): UserOptions
+        -{method} displayResults(ArrayList<PresentationInformation> presentationInformations): void
+    }
+}
+
+
+
+
+package Java {
+ class FileInputStream {
+ }
+}
+
+
+package ASM {
+    class FieldNode{
+    }
+    class MethodNode{
+    }
+    class ClassNode{
+    }
+    class MethodInsnNode{
+    }
+    class InsnList{
+    }
+}
+
+package plantuml{
+    class SourceStringReader
+}
+
+class Main {
+    +{method} main: void
+}
+
+Main ..> ProjectDataManager
+Main ..> UMLParser
+Main ..> Linter
+Main ..> ConsoleUI
+ConsoleUI ..> UserOptions
+ConsoleUI ..> PresentationInformation
+UI --> Linter
+PlantClassUMLParser .up.> FieldAdapter
+PlantClassUMLParser .up.> SourceStringReader
+PlantClassUMLParser .up.> MethodAdapter
+PlantClassUMLParser --> SourceStringReaderAdapter
+PlantClassUMLParser --> UMLTextWriter
+PlantClassUMLParser --|> UMLParser
+UMLParser ..> ClassAdapter
+Linter --> ProjectDataManager
+Linter -up-> Check
+Linter -up-> ClassAdapter
+Linter --> UMLParser
+Linter ..> PresentationInformation
+Linter ..> UserOptions
+Linter .up.> ClassAdapter
+ASMProjectDataManager --|> ProjectDataManager
+ProjectDataManager -down-> DataLoader
+ProjectDataManager ..> ClassAdapter
+Check ..> MethodAdapter
+Check ..> FieldAdapter
+StrategyPatternCheck --|> Check
+Check --> CheckData
+'SingletonPatternCheck ..> MethodAdapter
+'SingletonPatternCheck ..> FieldAdapter
+SingletonPatternCheck -up-|> Check
+'SingleResponsibilityPrincipleCheck ..> MethodAdapter
+SingleResponsibilityPrincipleCheck --|> Check
+'NoFinalizerCheck ..> MethodAdapter
+NoFinalizerCheck -up-|> Check
+NamingConventionCheck -up-|> Check
+'NamingConventionCheck ..> FieldAdapter
+'NamingConventionCheck ..> MethodAdapter
+NamingConvention ..>AutoCorrectDataHolder
+NamingConventionCheck ..> NamingConventionAutoCorrect
+NamingConventionAutoCorrect ..> ClassAdapter
+NamingConventionAutoCorrect ..> FieldAdapter
+NamingConventionAutoCorrect ..> MethodAdapter
+NamingConventionAutoCorrect ..> PresentationInformation
+NamingConventionAutoCorrect ..>DataHolder
+InformationHidingCheck --|> Check
+'InformationHidingCheck ..> MethodAdapter
+HollywoodPrincipleCheck -up-|> Check
+'HollywoodPrincipleCheck ..> MethodAdapter
+'HollywoodPrincipleCheck ..> FieldAdapter
+EqualsHashCodeCheck --|> Check
+'EqualsHashCodeCheck ..> MethodAdapter
+DecoratorPatternCheck --|> Check
+ObserverPatternCheck --|> Check
+NamingConventionCheck ..> BadNames
+'DecoratorPatternCheck ..> FieldAdapter
+Check ..> ClassAdapter
+Check ..> UserOptions
+Check ..> PresentationInformation
+ASMMethod --> MethodNode
+ASMMethod --|> MethodAdapter
+ASMField --> FieldNode
+ASMField --|> FieldAdapter
+ASMClass --|> ClassAdapter
+ASMClass --> ClassNode
+ASMClass ..> MethodNode
+ASMClass ..> FieldNode
+ASMMethod ..> InsnList
+ASMMethod ..> MethodInsnNode
+ClassAdapter ..> MethodAdapter
+ClassAdapter ..> FieldAdapter
+DefaultDataLoader --|> DataLoader
+DefaultDataLoader .up.> FileInputStream
+UI <|.. ConsoleUI
+@enduml

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class UMLParserTest {
     @Test
     public void parsesPublicConcreteClassAndMethods(){
-        SourceStringReaderAdapter sourceStringReaderAdapter = new PlantUMLSourceStringReader(new SourceStringReaderCreator());
+        SourceStringReaderAdapter sourceStringReaderAdapter = new PlantUMLSourceStringReader();
         PlantClassUMLParser parserUndertest = new PlantClassUMLParser(sourceStringReaderAdapter, new PrintWriterUMLTextWriter());
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
@@ -29,7 +29,7 @@ public class UMLParserTest {
 
     @Test
     public void parsesAbstractMethodsAndClassesAndPrivateMethodsAndExtensions(){
-        SourceStringReaderAdapter sourceStringReaderAdapter = new PlantUMLSourceStringReader(new SourceStringReaderCreator());
+        SourceStringReaderAdapter sourceStringReaderAdapter = new PlantUMLSourceStringReader();
         PlantClassUMLParser parserUndertest = new PlantClassUMLParser(sourceStringReaderAdapter, new PrintWriterUMLTextWriter());
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
@@ -53,7 +53,7 @@ public class UMLParserTest {
 
     @Test
     public void parsesInterfaceHasAEnumAndFields(){
-        SourceStringReaderAdapter sourceStringReaderAdapter = new PlantUMLSourceStringReader(new SourceStringReaderCreator());
+        SourceStringReaderAdapter sourceStringReaderAdapter = new PlantUMLSourceStringReader();
         PlantClassUMLParser parserUndertest = new PlantClassUMLParser(sourceStringReaderAdapter, new PrintWriterUMLTextWriter());
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
@@ -77,7 +77,7 @@ public class UMLParserTest {
 
     @Test
     public void parsesDependencies(){
-        SourceStringReaderAdapter sourceStringReaderAdapter = new PlantUMLSourceStringReader(new SourceStringReaderCreator());
+        SourceStringReaderAdapter sourceStringReaderAdapter = new PlantUMLSourceStringReader();
         PlantClassUMLParser parserUndertest = new PlantClassUMLParser(sourceStringReaderAdapter, new PrintWriterUMLTextWriter());
         DefaultDataLoader dataLoader = new DefaultDataLoader();
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
