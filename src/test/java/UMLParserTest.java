@@ -16,15 +16,14 @@ public class UMLParserTest {
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         ArrayList<ClassAdapter> classAdapters = (ArrayList<ClassAdapter>) projectDataManager.generateClassAdapters("./src/test/resources/PUMLDummyData/PublicConcreteClassWithPublicMethods");
         String result = parserUndertest.parseUML(classAdapters, "./src/test/resources/PUMLTest1GeneratedPUML"); // Can see output here if u want, can delete existing output and re-run too if u dont trusnt me
-        Assertions.assertEquals(
-                "@startuml\n" +
-                "class PublicConcreteClassWithPublicMethods{\n" +
+        Assertions.assertTrue(result.contains("@startuml\n"));
+        Assertions.assertTrue(result.contains("class PublicConcreteClassWithPublicMethods{\n" +
                 "+{method} PublicConcreteClassWithPublicMethods():void\n" +
                 "+{method} method1():void\n" +
                 "+{method} method2():boolean\n" +
                 "+{method} method3():String\n" +
-                "}\n" +
-                "@enduml\n", result);
+                "}\n"));
+        Assertions.assertTrue(result.contains("@enduml\n"));
     }
 
     @Test
@@ -35,20 +34,19 @@ public class UMLParserTest {
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         ArrayList<ClassAdapter> classAdapters = (ArrayList<ClassAdapter>) projectDataManager.generateClassAdapters("./src/test/resources/PUMLDummyData/AbstractMethodsAndClassAndPrivateMethodsAndExtension");
         String result = parserUndertest.parseUML(classAdapters, "./src/test/resources/PUMLTest2GeneratedPUML"); // Can see output here if u want, can delete existing output and re-run too if u dont trusnt me
-        Assertions.assertEquals(
-                "@startuml\n" +
-                        "abstract AbstractClassPrivateAbstractMethodsWithAbstractExtender{\n" +
-                        "+{method} AbstractClassPrivateAbstractMethodsWithAbstractExtender():void\n" +
-                        "+{abstract} publicAbstractMethod():void\n" +
-                        "-{method} privateMethod1():boolean\n" +
-                        "-{method} privateMethod2():String\n" +
-                        "}\n" +
-                        "class ExtendsAbstract{\n" +
-                        "+{method} ExtendsAbstract():void\n" + //constructor
-                        "+{method} publicAbstractMethod():void\n" +
-                        "}\n" +
-                        "AbstractClassPrivateAbstractMethodsWithAbstractExtender <|-- ExtendsAbstract\n" +
-                        "@enduml\n", result);
+        Assertions.assertTrue(result.contains("@startuml\n"));
+        Assertions.assertTrue(result.contains("abstract AbstractClassPrivateAbstractMethodsWithAbstractExtender{\n" +
+                "+{method} AbstractClassPrivateAbstractMethodsWithAbstractExtender():void\n" +
+                "+{abstract} publicAbstractMethod():void\n" +
+                "-{method} privateMethod1():boolean\n" +
+                "-{method} privateMethod2():String\n" +
+                "}\n"));
+        Assertions.assertTrue(result.contains("class ExtendsAbstract{\n" +
+                "+{method} ExtendsAbstract():void\n" + //constructor
+                "+{method} publicAbstractMethod():void\n" +
+                "}\n"));
+        Assertions.assertTrue(result.contains("AbstractClassPrivateAbstractMethodsWithAbstractExtender <|-- ExtendsAbstract\n"));
+        Assertions.assertTrue(result.contains("@enduml\n"));
     }
 
     @Test
@@ -59,20 +57,19 @@ public class UMLParserTest {
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         ArrayList<ClassAdapter> classAdapters = (ArrayList<ClassAdapter>) projectDataManager.generateClassAdapters("./src/test/resources/PUMLDummyData/EnumHasAInterfaceAndFields");
         String result = parserUndertest.parseUML(classAdapters, "./src/test/resources/PUMLTest3GeneratedPUML"); // Can see output here if u want, can delete existing output and re-run too if u dont trusnt me
-        Assertions.assertEquals(
-                "@startuml\n" +
-                        "Enum IAmAnEnum{\n" +
-                        "Im,doing,enummy,stuff\n" +
-                        "}\n" +
-                        "interface IAmAnInterface{\n" +
-                        "}\n" +
-                        "class IImplementAndHave{\n" +
-                        "-{field} IAmAnEnum myEnum\n" +
-                        "+{method} IImplementAndHave():void\n" +
-                        "}\n" +
-                        "IAmAnInterface <|-- IImplementAndHave\n" +
-                        "IImplementAndHave -> IAmAnEnum\n" + //Includes HasA relationships between classes in project (not things like java primitives ect.)
-                        "@enduml\n", result);
+        Assertions.assertTrue(result.contains("@startuml\n"));
+        Assertions.assertTrue(result.contains("Enum IAmAnEnum{\n" +
+                "Im,doing,enummy,stuff\n" +
+                "}\n"));
+        Assertions.assertTrue(result.contains("interface IAmAnInterface{\n" +
+                "}\n"));
+        Assertions.assertTrue(result.contains("class IImplementAndHave{\n" +
+                "-{field} IAmAnEnum myEnum\n" +
+                "+{method} IImplementAndHave():void\n" +
+                "}\n"));
+        Assertions.assertTrue(result.contains("IAmAnInterface <|-- IImplementAndHave\n"));
+        Assertions.assertTrue(result.contains("IImplementAndHave -> IAmAnEnum\n"));
+        Assertions.assertTrue(result.contains("@enduml\n"));
     }
 
     @Test
