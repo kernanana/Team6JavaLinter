@@ -17,12 +17,14 @@ if (hasProperty('buildScan')) {
 }
 
 dependencies {
+    implementation group: 'net.sourceforge.plantuml', name: 'plantuml', version: '8059'
+    implementation group: 'org.yaml', name: 'snakeyaml', version: '2.0'
+
     implementation 'org.ow2.asm:asm:9.2',
             'org.ow2.asm:asm-tree:9.2',
             'org.ow2.asm:asm-analysis:9.2',
-            'org.ow2.asm:asm-commons:9.2',
-            files('snakeyaml-2.0.jar'),
-            files('plantuml-8059.jar')
+            'org.ow2.asm:asm-commons:9.2'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }

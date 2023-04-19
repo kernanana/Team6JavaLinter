@@ -22,19 +22,9 @@ public class ConsoleUI extends UI {
     }
 
     protected void initializeAvailableChecks() {
-        registerCheck(CheckType.PoorNamingConvention, new NamingConventionCheck());
-        registerCheck(CheckType.EqualsHashCode, new EqualsHashCodeCheck());
-        registerCheck(CheckType.SingleResponsibilityPrinciple, new SingleResponsibilityPrincipleCheck());
-        registerCheck(CheckType.InformationHidingViolation, new InformationHidingCheck());
-        registerCheck(CheckType.SingletonPattern, new SingletonPatternCheck());
-        registerCheck(CheckType.DecoratorPattern, new DecoratorPatternCheck());
-        registerCheck(CheckType.StrategyPattern, new StrategyPatternCheck());
-        registerCheck(CheckType.DataClass, new DataClassCheck());
-    }
-
-    protected void registerCheck(CheckType checkType, Check check) {
-        availableChecks.add(checkType);
-        checkComposition.put(checkType, check);
+        for(CheckType checkType : CheckType.values()){
+            registerCheck(checkType, CheckFactory.getCheck(checkType));
+        }
     }
 
     public void UIMain() {
