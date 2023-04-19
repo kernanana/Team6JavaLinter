@@ -22,6 +22,8 @@ public class GUI extends UI  {
 
     private List<JCheckBox> checkBoxes = new ArrayList<>();
     private JTextField directoryField = new JTextField(25);
+    private JButton selectAll;
+    private JButton confirmChecks;
 
     public GUI(Linter linter, Map<String, Object> config) {
         super(linter, config);
@@ -61,7 +63,7 @@ public class GUI extends UI  {
         directoryField.setText(directory);
     }
 
-    private void setChecksFromConfig() {
+    public void setChecksFromConfig() {
         if(config.get("checks") instanceof LinkedHashMap) {
             LinkedHashMap<String, String> checkMap = (LinkedHashMap<String, String>) config.get("checks");
             for (String check : checkMap.keySet()) {
@@ -94,7 +96,7 @@ public class GUI extends UI  {
         panel.add(checksLabel);
     }
 
-    private void createChecksForUI(JPanel panel) {
+    public void createChecksForUI(JPanel panel) {
         for(CheckType checkType : CheckType.values()) {
             JCheckBox checkBox = new JCheckBox(checkType.name());
             checkBoxes.add(checkBox);
@@ -119,11 +121,11 @@ public class GUI extends UI  {
         return panel;
     }
 
-    private JPanel createButtonPanel() {
+    public JPanel createButtonPanel() {
         JPanel panel = new JPanel(new GridLayout(0, 2, 5, 5));
-        JButton selectAll = new JButton("Select all checks");
+        selectAll = new JButton("Select all checks");
         selectAll.addActionListener(getSelectAllListener());
-        JButton confirmChecks = new JButton("Confirm selected checks");
+        confirmChecks = new JButton("Confirm selected checks");
         confirmChecks.addActionListener(getConfirmChecksListener());
         panel.add(selectAll);
         panel.add(confirmChecks);
@@ -243,5 +245,25 @@ public class GUI extends UI  {
             display.append(info.printToDisplay() + "\n");
         }
         frame.setVisible(true);
+    }
+
+    public String getDirectoryTextField() {
+        return directoryField.getText();
+    }
+
+    public List<JCheckBox> getCheckBoxes() {
+        return checkBoxes;
+    }
+
+    public JButton getSelectAllButton() {
+        return selectAll;
+    }
+
+    public JButton getConfirmChecksButton() {
+        return confirmChecks;
+    }
+
+    public List<CheckType> getSelectedChecks() {
+        return availableChecks;
     }
 }
