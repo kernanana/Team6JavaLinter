@@ -1,5 +1,5 @@
 directory:
-  C:\Users\edwardbs\Documents\Rose Documents\CSSE375\project-repo\Team6JavaLinter\src\test\resources\DataClassDummyData
+  ./build/classes/java/main/ASMPracticeCode/RedundantInterface
 
 checks:
   PoorNamingConvention: true
