@@ -7,6 +7,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class ObserverPatternTests {
+    private CheckData setUpCheckData(String filepath) {
+        DefaultDataLoader dataLoader = new DefaultDataLoader();
+        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
+        return new CheckData(projectDataManager.generateClassAdapters(filepath), new UserOptions());
+    }
 
     @Test
     public void testCreateObserverPatternDetector() {
@@ -17,9 +22,7 @@ public class ObserverPatternTests {
     @Test
     public void testCheckForObserverPattern() {
         Check observerPatternCheck = new ObserverPatternCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/ObserverPatternDummyData/ValidObserverPattern"), new UserOptions());
+        CheckData checkData = setUpCheckData("./src/test/resources/ObserverPatternDummyData/ValidObserverPattern");
         PresentationInformation result = observerPatternCheck.check(checkData);
         String expected = "Observer Pattern has been detected: \n"
                 + "\t Subject: Subject | Observer: Observer\n"
@@ -31,9 +34,7 @@ public class ObserverPatternTests {
     @Test
     public void testCheckForInvalidObserverPattern() {
         Check observerPatternCheck = new ObserverPatternCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/ObserverPatternDummyData/InvalidObserverPattern"), new UserOptions());
+        CheckData checkData = setUpCheckData("./src/test/resources/ObserverPatternDummyData/InvalidObserverPattern");
         PresentationInformation result = observerPatternCheck.check(checkData);
 
         Assertions.assertFalse(result.hasPassed());

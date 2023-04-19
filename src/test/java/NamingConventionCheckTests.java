@@ -10,13 +10,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class NamingConventionCheckTests {
+    private CheckData setUpCheckData(String filepath) {
+        DefaultDataLoader dataLoader = new DefaultDataLoader();
+        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
+        return new CheckData(projectDataManager.generateClassAdapters(filepath), new UserOptions());
+    }
 
     @Test
     public void allGoodNames(){
         Check cnCheck = new NamingConventionCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/GoodNames"), new UserOptions());
+        CheckData checkData = setUpCheckData("./src/test/resources/NamingConventionDummyData/GoodNames");
         PresentationInformation result = cnCheck.check(checkData);
         Assertions.assertFalse(result.hasPassed()); //false if not violated
         Assertions.assertTrue(result.countDisplayLines() == 0);
@@ -25,9 +28,7 @@ public class NamingConventionCheckTests {
     @Test
     public void badClassName(){
         Check cnCheck = new NamingConventionCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/BadClassName"), new UserOptions());
+        CheckData checkData = setUpCheckData("./src/test/resources/NamingConventionDummyData/BadClassName");
         PresentationInformation result = cnCheck.check(checkData);
         Assertions.assertTrue(result.hasPassed()); //true because a violation exists
         Assertions.assertTrue(result.countDisplayLines() == 1);
@@ -37,9 +38,7 @@ public class NamingConventionCheckTests {
     @Test
     public void badFields_Methods_FINALS(){
         Check cnCheck = new NamingConventionCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/BadNames"), new UserOptions());
+        CheckData checkData = setUpCheckData("./src/test/resources/NamingConventionDummyData/BadNames");
         PresentationInformation result = cnCheck.check(checkData);
         Assertions.assertTrue(result.hasPassed()); //true because a violation exists
         Assertions.assertTrue(result.countDisplayLines() == 6);

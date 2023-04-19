@@ -12,13 +12,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class SingletonPatternTest {
+    private CheckData setUpCheckData(String filepath) {
+        DefaultDataLoader dataLoader = new DefaultDataLoader();
+        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
+        return new CheckData(projectDataManager.generateClassAdapters(filepath), new UserOptions());
+    }
 
     @Test
     public void noSingletonExists(){
         Check check = new SingletonPatternCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/SingletonPatternDummyData/NotSingleton"), new UserOptions());
+        CheckData checkData = setUpCheckData("./src/test/resources/SingletonPatternDummyData/NotSingleton");
         PresentationInformation result = check.check(checkData);
         Assertions.assertFalse(result.hasPassed()); //false if no Singleton detected
         Assertions.assertTrue(result.getDisplayLines().size() == 0);
@@ -26,9 +29,7 @@ public class SingletonPatternTest {
     @Test
     public void EagerSingletonTest(){
         Check check = new SingletonPatternCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/SingletonPatternDummyData/EagerSingleton"), new UserOptions());
+        CheckData checkData = setUpCheckData("./src/test/resources/SingletonPatternDummyData/EagerSingleton");
         PresentationInformation result = check.check(checkData);
         Assertions.assertTrue(result.hasPassed()); //false if no Singleton detected
         Assertions.assertTrue(result.countDisplayLines() == 1);
@@ -38,9 +39,7 @@ public class SingletonPatternTest {
     @Test
     public void LazySingletonTest(){
         Check check = new SingletonPatternCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/SingletonPatternDummyData/LazySingleton"), new UserOptions());
+        CheckData checkData = setUpCheckData("./src/test/resources/SingletonPatternDummyData/LazySingleton");
         PresentationInformation result = check.check(checkData);
         Assertions.assertTrue(result.hasPassed()); //false if no Singleton detected
         Assertions.assertTrue(result.countDisplayLines() == 1);

@@ -37,8 +37,6 @@ public class StrategyPatternTests {
         PresentationInformation info = check.check(checkData);
         Assertions.assertTrue(info.hasPassed());
         Assertions.assertEquals(CheckType.StrategyPattern, info.getCheckName());
-//        String str = "Strategy Pattern Detected!";
-//        Assertions.assertEquals(str, info.displayLines.get(0));
         String str2 = "Strategy Abstraction Class: ASMPracticeCode/StrategyDummyData/StrategyInterface, Concrete Strategy Classes: ASMPracticeCode/StrategyDummyData/ConcreteStrategy, ASMPracticeCode/StrategyDummyData/ConcreteStrategy1";
         Assertions.assertEquals(str2, info.getDisplayLines().get(0));
     }

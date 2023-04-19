@@ -11,12 +11,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class DataClassTests {
+
+    private CheckData setUpCheckData(String filepath) {
+        DefaultDataLoader dataLoader = new DefaultDataLoader();
+        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
+        return new CheckData(projectDataManager.generateClassAdapters(filepath), new UserOptions());
+    }
+
     @Test
     public void TestDataClasswithGetters(){
         Check check = new DataClassCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/GetterSetterDummyData/DataClass"), new UserOptions());
+        CheckData checkData = setUpCheckData("./src/test/resources/GetterSetterDummyData/DataClass");
         PresentationInformation result = check.check(checkData);
         Assertions.assertTrue(result.hasPassed()); //true if Data class is detected
         Assertions.assertTrue(result.countDisplayLines() == 1);
@@ -26,22 +31,17 @@ public class DataClassTests {
     @Test
     public void TestDataClasswithGettersAndSetters(){
         Check check = new DataClassCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/DataClassDummyData/GetSetDataClass"), new UserOptions());
+        CheckData checkData = setUpCheckData("./src/test/resources/DataClassDummyData/GetSetDataClass");
         PresentationInformation result = check.check(checkData);
         Assertions.assertTrue(result.hasPassed()); //true if Data class is detected
         Assertions.assertTrue(result.countDisplayLines() == 1);
-        System.out.println(result.getDisplayLines().get(0));
         Assertions.assertTrue(result.getDisplayLines().get(0).equals("ASMPracticeCode/DataClassDummyData/GetSetDataClass/GetSetDataClass is a Data Class"));
     }
 
     @Test
     public void TestDataClasswithOnlyFields(){
         Check check = new DataClassCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/DataClassDummyData/PublicFieldDataClass"), new UserOptions());
+        CheckData checkData = setUpCheckData("./src/test/resources/DataClassDummyData/PublicFieldDataClass");
         PresentationInformation result = check.check(checkData);
         Assertions.assertTrue(result.hasPassed()); //true if Data class is detected
         Assertions.assertTrue(result.countDisplayLines() == 1);
@@ -51,9 +51,7 @@ public class DataClassTests {
     @Test
     public void TestNotADataClass(){
         Check check = new DataClassCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/EqualsHashCodeDummyData/hasEqualsNoHashCode"), new UserOptions());
+        CheckData checkData = setUpCheckData("./src/test/resources/EqualsHashCodeDummyData/hasEqualsNoHashCode");
         PresentationInformation result = check.check(checkData);
         Assertions.assertFalse(result.hasPassed()); //true if Data class is detected
         Assertions.assertTrue(result.countDisplayLines() == 0);
