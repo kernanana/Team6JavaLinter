@@ -7,15 +7,24 @@ import Domain.PresentationInformation;
 import Domain.ProjectDataManager;
 import Domain.UserOptions;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class NamingConventionAutoCorrectTests {
 
+    private Check cnCheck;
+    private DefaultDataLoader dataLoader;
+    private ProjectDataManager projectDataManager;
+
+    @BeforeEach
+    public void setup() {
+        cnCheck = new NamingConventionCheck();
+        dataLoader = new DefaultDataLoader();
+        projectDataManager = new ASMProjectDataManager(dataLoader);
+    }
+
     @Test
     public void nothingToAutoCorrect(){
-        Check cnCheck = new NamingConventionCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/GoodNames"), new UserOptions());
         PresentationInformation result = cnCheck.check(checkData);
         Assertions.assertFalse(result.hasPassed()); //false if not violated
@@ -24,9 +33,6 @@ public class NamingConventionAutoCorrectTests {
 
     @Test
     public void badClassNameAutoCorrect(){
-        Check cnCheck = new NamingConventionCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         UserOptions userOptions = new UserOptions();
         userOptions.doAutoCorrect();
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/BadClassName"), userOptions);
@@ -41,9 +47,6 @@ public class NamingConventionAutoCorrectTests {
     public void badFields_Methods_FINALS_Autocorrect(){
         String[] names = {"Field", "FIELD_3", "Method", "METHOD_2"};
         String[] finalNames = {"FIeLD1", "field_2"};
-        Check cnCheck = new NamingConventionCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/BadNames"), new UserOptions());
         PresentationInformation result = cnCheck.check(checkData);
         for(String finalName : finalNames) {
