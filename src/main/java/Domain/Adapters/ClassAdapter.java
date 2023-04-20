@@ -16,7 +16,10 @@ public interface ClassAdapter {
     public abstract boolean getIsEnum();
     public abstract boolean removeField(String name);
 
+    public abstract boolean isAnObserver();
+
     public abstract byte[] addField(String fieldName, int accessType, String datatype) throws IOException;
 
     Class constructClass(byte[] output);
+
 }
