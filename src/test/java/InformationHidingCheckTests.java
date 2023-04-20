@@ -11,13 +11,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class InformationHidingCheckTests {
+    private CheckData setUpCheckData(String filepath) {
+        DefaultDataLoader dataLoader = new DefaultDataLoader();
+        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
+        return new CheckData(projectDataManager.generateClassAdapters(filepath), new UserOptions());
+    }
 
     @Test
     public void dataClassNotFlagged(){
         Check check = new InformationHidingCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/GetterSetterDummyData/DataClass"), new UserOptions());
+        CheckData checkData = setUpCheckData("./src/test/resources/GetterSetterDummyData/DataClass");
         PresentationInformation result = check.check(checkData);
         Assertions.assertFalse(result.hasPassed()); //false if no getters/setters or is a dataclass
         Assertions.assertTrue(result.countDisplayLines() == 1);
@@ -27,9 +30,7 @@ public class InformationHidingCheckTests {
     @Test
     public void noGetterSetters(){
         Check check = new InformationHidingCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/GetterSetterDummyData/NoGetterSetter"), new UserOptions());
+        CheckData checkData = setUpCheckData("./src/test/resources/GetterSetterDummyData/NoGetterSetter");
         PresentationInformation result = check.check(checkData);
         Assertions.assertFalse(result.hasPassed()); //false if no getters/setters or is a dataclass
         Assertions.assertTrue(result.countDisplayLines() == 0);
@@ -40,9 +41,7 @@ public class InformationHidingCheckTests {
         String[] setters = {"setNumber", "setString"};
         String[] getters = {"getNumber", "getString"};
         Check check = new InformationHidingCheck();
-        DefaultDataLoader dataLoader = new DefaultDataLoader();
-        ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
-        CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/GetterSetterDummyData/GetterSetter"), new UserOptions());
+        CheckData checkData = setUpCheckData("./src/test/resources/GetterSetterDummyData/GetterSetter");
         PresentationInformation result = check.check(checkData);
         Assertions.assertTrue(result.hasPassed()); //false if no getters/setters or is a dataclass
         for(String setter : setters)
