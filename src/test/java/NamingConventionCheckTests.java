@@ -21,7 +21,7 @@ public class NamingConventionCheckTests {
         String[] names = {"Field", "FIELD_3", "Method", "METHOD_2"};
         String[] finalNames = {"FIeLD1", "field_2"};
         Check cnCheck = new NamingConventionCheck();
-        CheckData checkData = setUpCheckData("./src/test/resources/NamingConventionDummyData/GoodNames");
+        CheckData checkData = setUpCheckData("./src/test/resources/NamingConventionDummyData/BadNames");
         PresentationInformation result = cnCheck.check(checkData);
         Assertions.assertTrue(result.hasPassed()); //true because a violation exists
         for(String finalName : finalNames) {
@@ -40,7 +40,7 @@ public class NamingConventionCheckTests {
     @Test
     public void allGoodNames(){
         Check cnCheck = new NamingConventionCheck();
-        CheckData checkData = setUpCheckData("./src/test/resources/NamingConventionDummyData/BadClassName");
+        CheckData checkData = setUpCheckData("./src/test/resources/NamingConventionDummyData/GoodNames");
         PresentationInformation result = cnCheck.check(checkData);
         Assertions.assertFalse(result.hasPassed()); //false if not violated
         Assertions.assertEquals(0, result.countDisplayLines());
@@ -49,11 +49,10 @@ public class NamingConventionCheckTests {
     @Test
     public void badClassName(){
         Check cnCheck = new NamingConventionCheck();
-        CheckData checkData = setUpCheckData("./src/test/resources/NamingConventionDummyData/BadNames");
+        CheckData checkData = setUpCheckData("./src/test/resources/NamingConventionDummyData/BadClassName");
         PresentationInformation result = cnCheck.check(checkData);
         Assertions.assertTrue(result.hasPassed()); //true because a violation exists
         Assertions.assertTrue(result.getDisplayLines().contains("Class name badClassName in ASMPracticeCode/NamingConventionDummyData/badClassName needs to be uppercased"));
     }
-
 
 }
