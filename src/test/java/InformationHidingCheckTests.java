@@ -38,14 +38,16 @@ public class InformationHidingCheckTests {
 
     @Test
     public void GetterSetters(){
+        String[] setters = {"setNumber", "setString"};
+        String[] getters = {"getNumber", "getString"};
         Check check = new InformationHidingCheck();
         CheckData checkData = setUpCheckData("./src/test/resources/GetterSetterDummyData/GetterSetter");
         PresentationInformation result = check.check(checkData);
         Assertions.assertTrue(result.hasPassed()); //false if no getters/setters or is a dataclass
-        Assertions.assertEquals(result.getDisplayLines().get(0), "setNumber in ASMPracticeCode/GetterSetterDummyData/GetterSetterClass is a Setter");
-        Assertions.assertEquals(result.getDisplayLines().get(1), "setString in ASMPracticeCode/GetterSetterDummyData/GetterSetterClass is a Setter");
-        Assertions.assertEquals(result.getDisplayLines().get(2), "getNumber in ASMPracticeCode/GetterSetterDummyData/GetterSetterClass is a Getter");
-        Assertions.assertEquals(result.getDisplayLines().get(3), "getString in ASMPracticeCode/GetterSetterDummyData/GetterSetterClass is a Getter");
+        for(String setter : setters)
+            Assertions.assertTrue(result.getDisplayLines().contains(setter + " in ASMPracticeCode/GetterSetterDummyData/GetterSetterClass is a Setter"));
+        for(String getter : getters)
+            Assertions.assertTrue(result.getDisplayLines().contains(getter + " in ASMPracticeCode/GetterSetterDummyData/GetterSetterClass is a Getter"));
         //Assertions.assertTrue(result.displayLines.size() == 0);
     }
 }

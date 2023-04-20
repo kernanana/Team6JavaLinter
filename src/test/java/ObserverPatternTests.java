@@ -36,7 +36,6 @@ public class ObserverPatternTests {
         Check observerPatternCheck = new ObserverPatternCheck();
         CheckData checkData = setUpCheckData("./src/test/resources/ObserverPatternDummyData/InvalidObserverPattern");
         PresentationInformation result = observerPatternCheck.check(checkData);
-
         Assertions.assertFalse(result.hasPassed());
         Assertions.assertTrue(result.getDisplayLines().isEmpty());
     }
