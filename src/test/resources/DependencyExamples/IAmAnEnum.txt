@@ -1,0 +1,16 @@
+@startuml
+Enum IAmAnEnum{
+Im,doing,enummy,stuff
+}
+
+interface IAmAnInterface{
+}
+
+class IImplementAndHave{
+-{field} IAmAnEnum myEnum
++{method} IImplementAndHave():void
+}
+
+IAmAnInterface <|-- IImplementAndHave
+IImplementAndHave -> IAmAnEnum
+@enduml

@@ -5,7 +5,11 @@ import Domain.Adapters.ClassAdapter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UMLParserTest {
 
@@ -22,42 +26,36 @@ public class UMLParserTest {
         }
     }
 
+    private String[] readDependenciesFromFile(String filename) throws IOException {
+        File file = new File(filename);
+        List<String> lines = Files.readAllLines(file.toPath());
+        return lines.toArray(new String[0]);
+    }
+
     @Test
-    public void parsesPublicConcreteClassAndMethods() {
-        String[] expectedDependencies = {"@startuml\n",
-                "class PublicConcreteClassWithPublicMethods{\n+{method} PublicConcreteClassWithPublicMethods():void\n+{method} " +
-                        "method1():void\n+{method} method2():boolean\n+{method} method3():String\n}\n", "@enduml\n"};
+    public void parsesPublicConcreteClassAndMethods() throws IOException {
+        String[] expectedDependencies = readDependenciesFromFile("./src/test/resources/DependencyExamples/PublicConcreteClassWithPublicMethods.txt");
         verifyDependencies(expectedDependencies, "./src/test/resources/PUMLDummyData/PublicConcreteClassWithPublicMethods",
                 "./src/test/resources/PUMLTest1GeneratedPUML");
     }
 
     @Test
-    public void parsesAbstractMethodsAndClassesAndPrivateMethodsAndExtensions() {
-        String[] expectedDependencies = {"@startuml\n",
-                "abstract AbstractClassPrivateAbstractMethodsWithAbstractExtender{\n+{method} AbstractClassPrivateAbstractMethodsWithAbstractExtender():void\n+{abstract}" +
-                        " publicAbstractMethod():void\n-{method} privateMethod1():boolean\n-{method} privateMethod2():String\n}\n",
-                "class ExtendsAbstract{\n+{method} ExtendsAbstract():void\n+{method} publicAbstractMethod():void\n}\n",
-                "AbstractClassPrivateAbstractMethodsWithAbstractExtender <|-- ExtendsAbstract\n",
-                "@enduml\n"};
+    public void parsesAbstractMethodsAndClassesAndPrivateMethodsAndExtensions() throws IOException {
+        String[] expectedDependencies = readDependenciesFromFile("./src/test/resources/DependencyExamples/AbstractClassPrivateAbstractMethodsWithAbstractExtender.txt");
         verifyDependencies(expectedDependencies, "./src/test/resources/PUMLDummyData/AbstractMethodsAndClassAndPrivateMethodsAndExtension",
                 "./src/test/resources/PUMLTest2GeneratedPUML");
     }
 
     @Test
-    public void parsesInterfaceHasAEnumAndFields() {
-        String[] expectedDependencies = {"@startuml\n", "Enum IAmAnEnum{\nIm,doing,enummy,stuff\n}\n",
-                "interface IAmAnInterface{\n}\n", "class IImplementAndHave{\n-{field} IAmAnEnum myEnum\n+{method} IImplementAndHave():void\n}\n",
-                "IAmAnInterface <|-- IImplementAndHave\n", "IImplementAndHave -> IAmAnEnum\n", "@enduml\n"};
+    public void parsesInterfaceHasAEnumAndFields() throws IOException {
+        String[] expectedDependencies = readDependenciesFromFile("./src/test/resources/DependencyExamples/IAmAnEnum.txt");
         verifyDependencies(expectedDependencies, "./src/test/resources/PUMLDummyData/EnumHasAInterfaceAndFields",
                 "./src/test/resources/PUMLTest3GeneratedPUML");
     }
 
     @Test
-    public void parsesDependencies(){
-        String[] expectedDependencies = {"@startuml\n", "class Dependency1{\n+{method} Dependency1():void\n}\n",
-                "class Dependency2{\n+{method} Dependency2():void\n}\n",
-                "class DependsOn{\n+{method} DependsOn():void\n-{method} dependsOn(Dependency1):void\n-{method} dependsOn2():Dependency2\n}\n",
-                "DependsOn .> Dependency1\n", "DependsOn .> Dependency2\n", "@enduml\n"};
+    public void parsesDependencies() throws IOException {
+        String[] expectedDependencies = readDependenciesFromFile("./src/test/resources/DependencyExamples/Dependency1.txt");
         verifyDependencies(expectedDependencies, "./src/test/resources/PUMLDummyData/PUMLDependant", "./src/test/resources/PUMLTest4GeneratedPUML"); // Can see output here if u want, can delete existing output and re-run too if u dont trusnt me
     }
 

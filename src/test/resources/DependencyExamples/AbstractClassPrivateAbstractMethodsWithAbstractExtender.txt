@@ -1,0 +1,13 @@
+@startuml
+abstract AbstractClassPrivateAbstractMethodsWithAbstractExtender{
++{method} AbstractClassPrivateAbstractMethodsWithAbstractExtender():void
++{abstract} publicAbstractMethod():void
+-{method} privateMethod1():boolean
+-{method} privateMethod2():String
+}
+class ExtendsAbstract{
++{method} ExtendsAbstract():void
++{method} publicAbstractMethod():void
+}
+AbstractClassPrivateAbstractMethodsWithAbstractExtender <|-- ExtendsAbstract
+@enduml
