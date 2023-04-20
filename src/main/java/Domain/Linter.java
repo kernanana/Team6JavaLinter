@@ -8,6 +8,9 @@ import net.sourceforge.plantuml.graph2.Plan;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,17 +29,21 @@ public class Linter {
     }
 
     public List<PresentationInformation> runChecks(List<CheckType> checksToRun, String filePath, UserOptions userOptions) throws IOException {
+        Path path = Paths.get(filePath);
+        if (!Files.exists(path)) {
+            throw new IOException("File or directory does not exist at path: " + filePath);
+        }
+
         this.classAdapters = this.projectDataManager.generateClassAdapters(filePath);
         List<PresentationInformation> presentationInformations = new ArrayList<>();
-        for (CheckType checkType : checksToRun){
+        for (CheckType checkType : checksToRun) {
             Check checkToRun = checkComposition.get(checkType);
             presentationInformations.add(checkToRun.check(new CheckData(classAdapters, userOptions)));
         }
-        if (userOptions.hasUMLParse()){
+        if (userOptions.hasUMLParse()) {
             this.umlParser.parseUML(this.classAdapters, userOptions.getUmlOutputDirectory());
         }
-        if(userOptions.hasSaveOutPut()){
-            //TODO: save outputs
+        if(userOptions.hasSaveOutPut()) {
             OutputWriter ow = new OutputWriter(presentationInformations);
             String returnMsg = ow.saveOutput();
             System.out.println(returnMsg);
