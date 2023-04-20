@@ -30,7 +30,7 @@ public class ObserverPatternTests {
     @Test
     public void testCheckForInvalidObserverPattern() {
         Check observerPatternCheck = new ObserverPatternCheck();
-        MockCheckData checkData = new MockCheckData("./src/test/resources/ObserverPatternDummyData/InValidObserverPattern");
+        MockCheckData checkData = new MockCheckData("./src/test/resources/ObserverPatternDummyData/InvalidObserverPattern");
         PresentationInformation result = observerPatternCheck.check(checkData);
         Assertions.assertFalse(result.hasPassed());
         Assertions.assertTrue(result.getDisplayLines().isEmpty());
