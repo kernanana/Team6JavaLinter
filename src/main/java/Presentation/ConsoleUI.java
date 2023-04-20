@@ -31,7 +31,7 @@ public class ConsoleUI extends UI {
         for (int i = 0; i < availableChecks.size(); i++){
             System.out.println((i + 1) + ". " + availableChecks.get(i).toString());
         }
-        System.out.println((availableChecks.size() + 1) + ". Perform all checks (if you have selected other options besides this, it will just run option "+ availableChecks.size() +")");
+        System.out.println((availableChecks.size() + 1) + ". Perform all checks (if you have selected other options besides this, it will just run option "+ (availableChecks.size() + 1) +")");
         System.out.println("Example answer: 1,3,2");
         try {
             String checksToPerform = reader.readLine();
@@ -67,7 +67,7 @@ public class ConsoleUI extends UI {
         }
     }
 
-    private ArrayList<Integer> fillWithAllChecks() {
+    public ArrayList<Integer> fillWithAllChecks() {
         ArrayList<Integer> allChecks = new ArrayList<>();
         for(int i = 0; i < availableChecks.size(); i++){
             allChecks.add(i);
