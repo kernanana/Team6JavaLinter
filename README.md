@@ -9,10 +9,6 @@ Gradle (if used): 6.8
 
 Any other libraries your project depends on: ASM 9.2, PlantUML-8059
 
-## Contributors
-Kernan Lee, Emma Brown, Zachary Decker
-
-## Team Member's Engineering Notebooks (one per person)
 
 ## All person features:
 -Naming Convention Violation; Information Hiding Violation; Singleton Pattern; Naming Convention Autocorrector (A), EqualsHashCode Check; Single Responsibility Principle Check; Decorator Pattern identification; plantuml code and image generation (A), Hollywood Principle Check; Strategy Pattern identification; No finalizer check
