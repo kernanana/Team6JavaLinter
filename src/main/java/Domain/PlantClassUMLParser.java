@@ -13,58 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 public class PlantClassUMLParser {
-
-    private static final Map<String, String> singleLetterMappings = new HashMap<>();
-
-    static {
-        singleLetterMappings.put("Z", "boolean");
-        singleLetterMappings.put("I", "int");
-        singleLetterMappings.put("D", "int");
-        singleLetterMappings.put("F", "float");
-    }
-
-    private SourceStringReaderAdapter sourceStringReaderAdapter;
-    private UMLTextWriter umlTextWriter;
-    public PlantClassUMLParser(SourceStringReaderAdapter sourceStringReaderAdapter, UMLTextWriter umlTextWriter){
-        this.sourceStringReaderAdapter = sourceStringReaderAdapter;
-        this.umlTextWriter = umlTextWriter;
-    }
-
     public String parseUML(List<ClassAdapter> classes, String outPutFilePath) {
         StringBuilder umlString = new StringBuilder("@startuml\n");
-
-        ArrayList<String> hasAs = new ArrayList<>(),
-                isAs = new ArrayList<>(),
-                dependsOn = new ArrayList<>(),
-                classesInProject = new ArrayList<>();
-
-        for (ClassAdapter classAdapter : classes) {
-            boolean isEnum = classAdapter.getIsEnum();
-            StringBuilder classString = new StringBuilder();
-            String className = classAdapter.getClassName();
-            ArrayList<String> alreadyDependent = new ArrayList<>();
-
-            className = getProperClassName(classAdapter, className);
-            classString.append(getClassPrefix(classAdapter, className));
-            classesInProject.add(className);
-
-            if (isEnum) {
-                appendEnumClass(umlString, classAdapter, classString);
-            } else {
-                for (FieldAdapter fieldAdapter : classAdapter.getAllFields()) {
-                    appendParsedField(fieldAdapter, classString, className, hasAs, singleLetterMappings);
-                }
-                for (MethodAdapter methodAdapter : classAdapter.getAllMethods()){
-                    appendParsedMethod(methodAdapter, classString, className, dependsOn, alreadyDependent);
-                }
-                for (String interfaceString : classAdapter.getInterfaces()){
-                    isAs.add(interfaceString + " <|-- " + className);
-                }
-                isAs.add(classAdapter.getExtends() + " <|-- " +  className);
-                classString.append("}\n");
-                umlString.append(classString);
-            }
-        }
+        initLists();
+        findClasses(classes, umlString);
         isAs.addAll(hasAs);
         isAs.addAll(dependsOn);
         for (String arrow : isAs){
@@ -75,6 +27,58 @@ public class PlantClassUMLParser {
 
         System.out.println("\nGenerated UML! Notice that the image sized is capped, but you can always use the text to generate a larger image on your own.\n");
         return umlString.toString();
+    }
+
+    private static final Map<String, String> singleLetterMappings = new HashMap<>();
+
+    static {
+        singleLetterMappings.put("Z", "boolean");
+        singleLetterMappings.put("I", "int");
+        singleLetterMappings.put("D", "int");
+        singleLetterMappings.put("F", "float");
+    }
+
+    private ArrayList<String> hasAs, isAs, dependsOn, classesInProject;
+    private SourceStringReaderAdapter sourceStringReaderAdapter;
+    private UMLTextWriter umlTextWriter;
+    public PlantClassUMLParser(SourceStringReaderAdapter sourceStringReaderAdapter, UMLTextWriter umlTextWriter){
+        this.sourceStringReaderAdapter = sourceStringReaderAdapter;
+        this.umlTextWriter = umlTextWriter;
+    }
+
+
+    private void findClasses(List<ClassAdapter> classes, StringBuilder umlString) {
+        for (ClassAdapter classAdapter : classes) {
+            boolean isEnum = classAdapter.getIsEnum();
+            StringBuilder classString = new StringBuilder();
+            String className = classAdapter.getClassName();
+            ArrayList<String> alreadyDependent = new ArrayList<>();
+
+            className = getProperClassName(classAdapter, className);
+            classString.append(getClassPrefix(classAdapter, className));
+            classesInProject.add(className);
+
+            handleEnum(umlString, classAdapter, isEnum, classString, className, alreadyDependent);
+        }
+    }
+
+    private void handleEnum(StringBuilder umlString, ClassAdapter classAdapter, boolean isEnum, StringBuilder classString, String className, ArrayList<String> alreadyDependent) {
+        if (isEnum) {
+            appendEnumClass(umlString, classAdapter, classString);
+        } else {
+            for (FieldAdapter fieldAdapter : classAdapter.getAllFields()) {
+                appendParsedField(fieldAdapter, classString, className, singleLetterMappings);
+            }
+            for (MethodAdapter methodAdapter : classAdapter.getAllMethods()){
+                appendParsedMethod(methodAdapter, classString, className, alreadyDependent);
+            }
+            for (String interfaceString : classAdapter.getInterfaces()){
+                isAs.add(interfaceString + " <|-- " + className);
+            }
+            isAs.add(classAdapter.getExtends() + " <|-- " + className);
+            classString.append("}\n");
+            umlString.append(classString);
+        }
     }
 
     private String getProperClassName(ClassAdapter classAdapter, String className) {
@@ -102,15 +106,32 @@ public class PlantClassUMLParser {
         this.umlTextWriter.writeUMLText(outPutFilePath, umlString.toString());
     }
 
-    private void appendParsedField(FieldAdapter fieldAdapter, StringBuilder classString, String className, ArrayList<String> hasAs, Map<String, String> singleLetterMappings) {
+    private void appendParsedField(FieldAdapter fieldAdapter, StringBuilder classString, String className, Map<String, String> singleLetterMappings) {
         classString.append(fieldAdapter.getIsPublic() ? "+" : "-");
         String fieldType = getFieldType(singleLetterMappings, fieldAdapter);
         classString.append("{field} " + fieldType + " " + fieldAdapter.getFieldName() + "\n");
         hasAs.add(className + " -> " + fieldType);
     }
 
-    private void appendParsedMethod(MethodAdapter methodAdapter, StringBuilder classString, String className, ArrayList<String> dependsOn, ArrayList<String> alreadyDependent) {
+    private void appendParsedMethod(MethodAdapter methodAdapter, StringBuilder classString, String className, ArrayList<String> alreadyDependent) {
         classString.append(methodAdapter.getIsPublic() ? "+" : "-");
+        determineMethodType(methodAdapter, classString, className);
+        if (methodAdapter.getArgTypes().size() == 0){
+            classString.append("):");
+        }
+        determineMethodArgs(methodAdapter, classString, className, alreadyDependent);
+        String returnType = methodAdapter.getReturnType();
+        if (returnType.contains(".")){
+            returnType = methodAdapter.getReturnType().split("\\.")[methodAdapter.getReturnType().split("\\.").length - 1];
+        }
+        classString.append(returnType + "\n");
+        if (!alreadyDependent.contains(returnType)){
+            dependsOn.add(className + " .> " + returnType);
+            alreadyDependent.add(returnType);
+        }
+    }
+
+    private void determineMethodType(MethodAdapter methodAdapter, StringBuilder classString, String className) {
         if (methodAdapter.getMethodName().equals("<init>")){
             classString.append("{method} " + className + "(");
         }else if (methodAdapter.getIsAbstract()){
@@ -118,9 +139,9 @@ public class PlantClassUMLParser {
         }else{
             classString.append("{method} " + methodAdapter.getMethodName() + "(");
         }
-        if (methodAdapter.getArgTypes().size() == 0){
-            classString.append("):");
-        }
+    }
+
+    private void determineMethodArgs(MethodAdapter methodAdapter, StringBuilder classString, String className, ArrayList<String> alreadyDependent) {
         for (int i = 0; i < methodAdapter.getArgTypes().size(); i++) {
             String argString = methodAdapter.getArgTypes().get(i);
             if (argString.contains(".")){
@@ -135,15 +156,6 @@ public class PlantClassUMLParser {
                 dependsOn.add(className + " .> " + argString);
                 alreadyDependent.add(argString);
             }
-        }
-        String returnType = methodAdapter.getReturnType();
-        if (returnType.contains(".")){
-            returnType = methodAdapter.getReturnType().split("\\.")[methodAdapter.getReturnType().split("\\.").length - 1];
-        }
-        classString.append(returnType + "\n");
-        if (!alreadyDependent.contains(returnType)){
-            dependsOn.add(className + " .> " + returnType);
-            alreadyDependent.add(returnType);
         }
     }
 
@@ -190,5 +202,11 @@ public class PlantClassUMLParser {
         return classString;
     }
 
+    private void initLists() {
+        hasAs = new ArrayList<>();
+        isAs = new ArrayList<>();
+        dependsOn = new ArrayList<>();
+        classesInProject = new ArrayList<>();
+    }
 
 }
