@@ -1,0 +1,7 @@
+directory:
+  .\src\test\resources\DataClassDummyData
+
+checks:
+  PoorNamingConvention: true
+  EqualsHashCode: true
+  SingleResponsibilityPrinciple: true
