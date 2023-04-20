@@ -35,7 +35,6 @@ public class ObserverPatternTests {
         ProjectDataManager projectDataManager = new ASMProjectDataManager(dataLoader);
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/ObserverPatternDummyData/InvalidObserverPattern"), new UserOptions());
         PresentationInformation result = observerPatternCheck.check(checkData);
-
         Assertions.assertFalse(result.hasPassed());
         Assertions.assertTrue(result.getDisplayLines().isEmpty());
     }

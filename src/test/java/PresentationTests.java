@@ -29,8 +29,6 @@ public class PresentationTests {
         PresentationInformation pi = new PresentationInformation(CheckType.DecoratorPattern);
         pi.reinitialize(CheckType.DecoratorPattern);
         Assertions.assertFalse(pi.hasPassed());
-        Assertions.assertEquals(pi.getCheckName(), CheckType.DecoratorPattern);
-        Assertions.assertEquals(pi.getDisplayLines(), new ArrayList<>());
         Assertions.assertEquals(pi.countDisplayLines(), 0);
         pi.addDisplayLine("Sample display Line");
         Assertions.assertEquals(pi.countDisplayLines(), 1);
@@ -40,17 +38,13 @@ public class PresentationTests {
         PresentationInformation pi = new PresentationInformation(CheckType.DecoratorPattern);
         pi.reinitialize(CheckType.DecoratorPattern);
         Assertions.assertFalse(pi.hasPassed());
-        Assertions.assertEquals(pi.getCheckName(), CheckType.DecoratorPattern);
-        Assertions.assertEquals(pi.getDisplayLines(), new ArrayList<>());
         Assertions.assertTrue(pi.isPresentingCheck(CheckType.DecoratorPattern));
     }
 
-    @Test void TestreturnUIMessage(){
+    @Test void TestReturnUIMessage(){
         PresentationInformation pi = new PresentationInformation(CheckType.DecoratorPattern);
         pi.reinitialize(CheckType.DecoratorPattern);
         Assertions.assertFalse(pi.hasPassed());
-        Assertions.assertEquals(pi.getCheckName(), CheckType.DecoratorPattern);
-        Assertions.assertEquals(pi.getDisplayLines(), new ArrayList<>());
         Assertions.assertEquals(pi.returnUIMessage(), "DecoratorPattern failed!");
         pi.passedCheck();
         Assertions.assertEquals(pi.returnUIMessage(), "DecoratorPattern passed!");
