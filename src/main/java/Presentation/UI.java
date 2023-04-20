@@ -14,7 +14,7 @@ import java.util.Map;
 
 public abstract class UI {
     protected Linter linter;
-    protected final List<CheckType> availableChecks;
+    public List<CheckType> availableChecks;
     protected final Map<CheckType, Check> checkComposition;
     protected Map<String, Object> config;
 
