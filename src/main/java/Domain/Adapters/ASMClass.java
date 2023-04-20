@@ -85,6 +85,11 @@ public class ASMClass implements ClassAdapter {
     }
 
     @Override
+    public boolean isAnObserver() {
+        return true;
+    }
+
+    @Override
     public byte[] addField(String fieldName, int accessType, String dataType) throws IOException {
         ASMClassWriterFacade writer = new ASMClassWriterFacade(this.getClassName());
         return writer.addField(fieldName,accessType);

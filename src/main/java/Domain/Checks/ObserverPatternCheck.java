@@ -3,6 +3,7 @@ package Domain.Checks;
 import Domain.Adapters.ClassAdapter;
 import Domain.Adapters.FieldAdapter;
 import Domain.Adapters.MethodAdapter;
+import Domain.Adapters.NullAdapter;
 import Domain.CheckType;
 import Domain.PresentationInformation;
 import Domain.UserOptions;
@@ -16,10 +17,10 @@ public class ObserverPatternCheck implements Check{
 
     private MethodAdapter observerMethod;
     private List<ClassAdapter> classes;
-    private ClassAdapter subject = null;
-    private ClassAdapter observer = null;
-    private ClassAdapter concSubject = null;
-    private ClassAdapter concObserver = null;
+    private ClassAdapter subject = new NullAdapter();
+    private ClassAdapter observer = new NullAdapter();
+    private ClassAdapter concSubject = new NullAdapter();
+    private ClassAdapter concObserver = new NullAdapter();
 
     @Override
     public PresentationInformation check(CheckData data) {
@@ -43,7 +44,7 @@ public class ObserverPatternCheck implements Check{
             if(fieldAdapter.isList()) {
                 String fieldType = fieldAdapter.getCollectionType();
                 observer = findObserver(fieldType);
-                if (observer != null) {
+                if (observer.isAnObserver()) {
                     findConcreteImplementations(presentationInformation);
                 }
             }
@@ -55,7 +56,7 @@ public class ObserverPatternCheck implements Check{
             findConcreteObserver(classNode);
             findConcreteSubject(classNode);
         }
-        if (concObserver != null && concSubject != null) {
+        if (concObserver.isAnObserver() && concSubject.isAnObserver()) {
             presentationInformation.passedCheck();
             presentationInformation.addDisplayLine("Observer Pattern has been detected: \n"
                     + "\t Subject: " + subject.getClassName() + " | Observer: " + observer.getClassName() + "\n"
@@ -78,18 +79,23 @@ public class ObserverPatternCheck implements Check{
                 }
             }
         }
-        return null;
+        return new NullAdapter();
     }
 
     private void findConcreteObserver(ClassAdapter classNode) {
+        boolean foundObserver = false;
         if(classNode.getInterfaces().contains(observer.getClassName())) {
             for(FieldAdapter field : classNode.getAllFields()) {
                 if (field.getType().contains(subject.getClassName())) {
                     for (MethodAdapter method : classNode.getAllMethods()) {
                         if (!method.getIsAbstract() && method.getMethodName().equals(observerMethod.getMethodName()))
+                            foundObserver = true;
                             concObserver = classNode;
                     }
                 }
+            }
+            if(!foundObserver){
+                concObserver = new NullAdapter();
             }
         }
     }
