@@ -5,7 +5,7 @@ import Domain.UserOptions;
 
 import java.util.List;
 
-public class CheckData {
+public class CheckData implements CheckDataInterface {
     private final List<ClassAdapter> classes;
     private final UserOptions userOptions;
 

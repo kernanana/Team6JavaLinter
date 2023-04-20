@@ -13,7 +13,7 @@ import java.util.List;
 public class SingletonPatternCheck implements Check {
 
     @Override
-    public PresentationInformation check(CheckData data) {
+    public PresentationInformation check(CheckDataInterface data) {
         PresentationInformation presentationInformation = new PresentationInformation(CheckType.SingletonPattern);
         List<ClassAdapter> classes = data.getClasses();
 

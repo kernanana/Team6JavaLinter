@@ -12,7 +12,7 @@ import java.util.List;
 public class RedundantInterface implements Check {
 
     @Override
-    public PresentationInformation check(CheckData checkData) {
+    public PresentationInformation check(CheckDataInterface checkData) {
         PresentationInformation presentationInformation = new PresentationInformation(CheckType.RedundantInterface);
         presentationInformation.passedCheck();
         

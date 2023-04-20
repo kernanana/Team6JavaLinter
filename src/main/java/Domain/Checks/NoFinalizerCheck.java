@@ -10,7 +10,7 @@ import java.util.List;
 
 public class NoFinalizerCheck implements Check{
     @Override
-    public PresentationInformation check(CheckData data) {
+    public PresentationInformation check(CheckDataInterface data) {
         PresentationInformation info = new PresentationInformation(CheckType.NoFinalizerCheck);
         info.passedCheck();
         List<ClassAdapter> classes = data.getClasses();

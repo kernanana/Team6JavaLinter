@@ -23,7 +23,7 @@ public class ObserverPatternCheck implements Check{
     private ClassAdapter concObserver = new NullAdapter();
 
     @Override
-    public PresentationInformation check(CheckData data) {
+    public PresentationInformation check(CheckDataInterface data) {
         PresentationInformation presentationInformation = new PresentationInformation(CheckType.ObserverPattern);
         this.classes = data.getClasses();
 
