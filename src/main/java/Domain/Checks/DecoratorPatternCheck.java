@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DecoratorPatternCheck implements Check{
     @Override
-    public PresentationInformation check(CheckData data) {
+    public PresentationInformation check(CheckDataInterface data) {
         PresentationInformation presentationInformation = new PresentationInformation(CheckType.DecoratorPattern);
         List<ClassAdapter> classes = data.getClasses();
         for (ClassAdapter classAdapter : classes){

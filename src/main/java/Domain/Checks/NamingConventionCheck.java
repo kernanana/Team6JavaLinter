@@ -22,7 +22,7 @@ public class NamingConventionCheck implements Check {
     private static final Pattern finalNaming = Pattern.compile("[A-Z_0-9]");
 
     @Override
-    public PresentationInformation check(CheckData data) {
+    public PresentationInformation check(CheckDataInterface data) {
         PresentationInformation presentationInformation = new PresentationInformation(CheckType.PoorNamingConvention);
         BadNames badNames = new BadNames();
         ArrayList<String> displayLines = new ArrayList<>();

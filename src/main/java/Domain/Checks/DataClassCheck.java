@@ -10,7 +10,7 @@ import java.util.List;
 public class DataClassCheck implements Check{
 
     @Override
-    public PresentationInformation check(CheckData data) {
+    public PresentationInformation check(CheckDataInterface data) {
         PresentationInformation pi = new PresentationInformation(CheckType.DataClass);
         List<ClassAdapter> classes = data.getClasses();
         for(int i = 0; i<classes.size();i++){

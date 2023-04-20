@@ -16,7 +16,7 @@ public class SingleResponsibilityPrincipleCheck implements Check{
 
 
     @Override
-    public PresentationInformation check(CheckData data) {
+    public PresentationInformation check(CheckDataInterface data) {
         List<ClassAdapter> classes = data.getClasses();
         UserOptions userOptions = new UserOptions();
 

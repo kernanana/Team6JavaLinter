@@ -12,7 +12,7 @@ public class InformationHidingCheck implements Check{
 
 
     @Override
-    public PresentationInformation check(CheckData data) {
+    public PresentationInformation check(CheckDataInterface data) {
         PresentationInformation presentationInformation = new PresentationInformation(CheckType.InformationHidingViolation);
         List<ClassAdapter> classes = data.getClasses();
         for (int i = 0; i < classes.size();i++){

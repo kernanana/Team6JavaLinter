@@ -13,7 +13,7 @@ import static java.util.Objects.isNull;
 
 public class HollywoodPrincipleCheck implements Check{
     @Override
-    public PresentationInformation check(CheckData data) {
+    public PresentationInformation check(CheckDataInterface data) {
         PresentationInformation info = new PresentationInformation(CheckType.HollywoodPrinciple);
         List<ClassAdapter> classes = data.getClasses();
         info.passedCheck();

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class StrategyPatternCheck implements Check{
     @Override
-    public PresentationInformation check(CheckData data) {
+    public PresentationInformation check(CheckDataInterface data) {
         PresentationInformation information = new PresentationInformation(CheckType.StrategyPattern);
         List<ClassAdapter> classes = data.getClasses();
         

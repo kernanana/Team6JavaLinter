@@ -11,7 +11,7 @@ import java.util.List;
 public class EqualsHashCodeCheck implements Check{
 
     @Override
-    public PresentationInformation check(CheckData data) {
+    public PresentationInformation check(CheckDataInterface data) {
         PresentationInformation presentationInformation = new PresentationInformation(CheckType.EqualsHashCode);
         presentationInformation.passedCheck();
         List<ClassAdapter> classes = data.getClasses();
