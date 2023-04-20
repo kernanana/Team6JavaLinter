@@ -9,10 +9,7 @@ import Domain.UserOptions;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public class ConsoleUI extends UI {
@@ -34,6 +31,7 @@ public class ConsoleUI extends UI {
         for (int i = 0; i < availableChecks.size(); i++){
             System.out.println((i + 1) + ". " + availableChecks.get(i).toString());
         }
+        System.out.println((availableChecks.size() + 1) + ". Perform all checks (if you have selected other options besides this, it will just run option "+ availableChecks.size() +")");
         System.out.println("Example answer: 1,3,2");
         try {
             String checksToPerform = reader.readLine();
@@ -41,6 +39,11 @@ public class ConsoleUI extends UI {
             ArrayList<Integer> intChecksToPerform = new ArrayList<>();
             for (String checkToPerform : splitChecksToPerform){
                 intChecksToPerform.add(Integer.parseInt(checkToPerform) - 1);
+                if((availableChecks.size() + 1 + "").equals(checkToPerform)){
+                    System.out.println("Performing all checks");
+                    intChecksToPerform = fillWithAllChecks();
+                    break;
+                }
             }
             ArrayList<CheckType> checksToPerformTypes = new ArrayList<>();
             for (Integer checkToPerformInt : intChecksToPerform){
@@ -62,6 +65,14 @@ public class ConsoleUI extends UI {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private ArrayList<Integer> fillWithAllChecks() {
+        ArrayList<Integer> allChecks = new ArrayList<>();
+        for(int i = 0; i < availableChecks.size(); i++){
+            allChecks.add(i);
+        }
+        return allChecks;
     }
 
     protected UserOptions getUserOptions(BufferedReader reader) throws IOException {
