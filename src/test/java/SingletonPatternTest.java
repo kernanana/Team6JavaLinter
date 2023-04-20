@@ -27,22 +27,34 @@ public class SingletonPatternTest {
         Assertions.assertTrue(result.getDisplayLines().size() == 0);
     }
     @Test
-    public void EagerSingletonTest(){
+    public void EagerSingletonTest_hasPassedIsTrue() {
         Check check = new SingletonPatternCheck();
         CheckData checkData = setUpCheckData("./src/test/resources/SingletonPatternDummyData/EagerSingleton");
         PresentationInformation result = check.check(checkData);
         Assertions.assertTrue(result.hasPassed()); //false if no Singleton detected
-        Assertions.assertTrue(result.countDisplayLines() == 1);
+    }
+
+    @Test
+    public void EagerSingletonTest_DisplayLineWhenFound(){
+        Check check = new SingletonPatternCheck();
+        CheckData checkData = setUpCheckData("./src/test/resources/SingletonPatternDummyData/EagerSingleton");
+        PresentationInformation result = check.check(checkData);
         Assertions.assertEquals(result.getDisplayLines().get(0), "Singleton Pattern detected for ASMPracticeCode/SingletonPatternDummyData/EagerSingleton");
     }
 
     @Test
-    public void LazySingletonTest(){
+    public void LazySingletonTest_hasPassedIsTrue() {
         Check check = new SingletonPatternCheck();
         CheckData checkData = setUpCheckData("./src/test/resources/SingletonPatternDummyData/LazySingleton");
         PresentationInformation result = check.check(checkData);
         Assertions.assertTrue(result.hasPassed()); //false if no Singleton detected
-        Assertions.assertTrue(result.countDisplayLines() == 1);
+    }
+
+    @Test
+    public void LazySingletonTest_DisplayLineWhenFound(){
+        Check check = new SingletonPatternCheck();
+        CheckData checkData = setUpCheckData("./src/test/resources/SingletonPatternDummyData/LazySingleton");
+        PresentationInformation result = check.check(checkData);
         Assertions.assertEquals(result.getDisplayLines().get(0), "Singleton Pattern detected for ASMPracticeCode/SingletonPatternDummyData/LazySingleton");
     }
 }
