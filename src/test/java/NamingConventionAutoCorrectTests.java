@@ -13,13 +13,12 @@ import org.junit.jupiter.api.Test;
 public class NamingConventionAutoCorrectTests {
 
     private Check cnCheck;
-    private DefaultDataLoader dataLoader;
     private ProjectDataManager projectDataManager;
 
     @BeforeEach
     public void setup() {
         cnCheck = new NamingConventionCheck();
-        dataLoader = new DefaultDataLoader();
+        DefaultDataLoader dataLoader = new DefaultDataLoader();
         projectDataManager = new ASMProjectDataManager(dataLoader);
     }
 
@@ -28,7 +27,7 @@ public class NamingConventionAutoCorrectTests {
         CheckData checkData = new CheckData(projectDataManager.generateClassAdapters("./src/test/resources/NamingConventionDummyData/GoodNames"), new UserOptions());
         PresentationInformation result = cnCheck.check(checkData);
         Assertions.assertFalse(result.hasPassed()); //false if not violated
-        Assertions.assertTrue(result.getDisplayLines().size() == 0);
+        Assertions.assertEquals(0, result.getDisplayLines().size());
     }
 
     @Test
