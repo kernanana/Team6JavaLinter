@@ -31,6 +31,9 @@ package DataSource{
         +{method} addField(String fieldName, int accessOpcode): byte[]
         +{method} publicizeMethod(): byte[]
     }
+    class ConfigParser {
+        +{method} parseConfig(String directory): Map<String, Object>
+    }
     PlantUMLSourceStringReader --|> SourceStringReaderAdapter
     PrintWriterUMLTextWriter --|> UMLTextWriter
 }
@@ -168,6 +171,11 @@ package Domain{
             -{method} parseType(String type): String
             -{method} parseExtendedClass(String extendedClass): String
         }
+        class RedundantInterfaceCheck {
+            +{method} check(CheckData data): PresentationInformation
+            -{method} checkClass(List<ClassAdapter> classes, PresentationInformation presentationInformation): String
+            -{method} getClassAdapter(List<ClassAdapter> classes, String className): ClassAdapter
+        }
         class EqualsHashCodeCheck{
             +{method} check(CheckData data): PresentationInformation
         }
@@ -200,7 +208,11 @@ package Domain{
         }
         class NamingConventionCheck {
             +{method} check(CheckData data): PresentationInformation
-            +{method} PresentationInformation tryAutoCorrect(List<ClassAdapter> classes, BadNames badNames, PresentationInformation presentationInformation)
+            -{method} checkClass(ClassAdapter classAdapter, PresentationInformation presentationInformation, ArrayList<String> displayLines, BadNames badNames): void
+            -{method} checkMethodName(MethodAdapter method, PresentationInformation presentationInformation, String className, BadNames badNames): void
+            -{method} checkFieldName(FieldAdapter field, PresentationInformation presentationInformation, String className, BadNames badNames): void
+            -{method} checkClassName(BadNames badNames, PresentationInformation presentationInformation, String className): void
+            -{method} tryAutoCorrect(List<ClassAdapter> classes, BadNames badNames, PresentationInformation presentationInformation): PresentationInformation
         }
         class NoFinalizerCheck {
             +{method} check(CheckData data): PresentationInformation
@@ -211,6 +223,10 @@ package Domain{
         }
         class SingletonPatternCheck {
             +{method} check(CheckData data): PresentationInformation
+            -{method} isSingleton(ClassAdapter classAdapter): boolean
+            -{method} getClassName(ClassAdapter classAdapter): String
+            -{method} getFieldType(FieldAdapter fieldAdapter): String
+            -{method} getMethodReturnType(MethodAdapter methodAdapter): String
         }
         class StrategyPatternCheck {
             +{method} check(CheckData data): PresentationInformation
@@ -253,6 +269,7 @@ package Domain{
         SingletonPattern
         StrategyPattern
         DecoratorPattern
+        RedundantInterface
     }
 
     class UserOptions {
@@ -298,7 +315,7 @@ package Domain{
         -{field} ProjectDataManager
         -{field} Map<CheckType, Check>
         -{field} List<ClassAdapter>
-        -{field} UMLParser
+        -{field} PlantClassUMLParser
         +{method} runChecks(List<CheckType> checksToRun, String filePath, UserOptions userOptions): List<PresentationInformation>
     }
 
@@ -306,10 +323,14 @@ package Domain{
     -{field} SourceStringReaderAdapter
     -{field} UMLTextWriter
     +{method} parseUML(List<ClassAdapter> classes, String outPutFilePath): String
-    }
-
-    abstract class UMLParser {
-    +{abstract} parseUML(List<ClassAdapter> classes, String outPutFilePath): String
+    -{method} getProperClassName(ClassAdapter classAdapter, String className): String
+    -{method} parseArrow(StringBuilder sb, ArrayList<String> parts, String): void
+    -{method} writeUMLImage(StringBuilder sb, String path): void
+    -{method} appendParsedField(FieldAdapter, StringBuilder, String, ArrayList<String>, Map<String, String>): void
+    -{method} appendParsedMethod(MethodAdapter, StringBuilder, String, ArrayList<String>, ArrayList<String>): void
+    -{method} getFieldType(Map<String, String>, FieldAdapter): String
+    -{method} appendEnumClass(StringBuilder, ClassAdapter, StringBuilder): void
+    -{method} getClassPrefix(ClassAdapter, String): String
     }
 }
 
@@ -329,6 +350,8 @@ package Presentation {
         +{method} UIMain(): void
         -{method} getUserOptions(ArrayList<CheckType> checksToPerformTypes, BufferedReader reader): UserOptions
         -{method} displayResults(ArrayList<PresentationInformation> presentationInformations): void
+        -{method} initializeAvailableChecks(): void
+        -{method} registerCheck(CheckType, Check): void
     }
 }
 
@@ -363,7 +386,7 @@ class Main {
 }
 
 Main ..> ProjectDataManager
-Main ..> UMLParser
+Main ..> PlantClassUMLParser
 Main ..> Linter
 Main ..> ConsoleUI
 ConsoleUI ..> UserOptions
@@ -374,12 +397,11 @@ PlantClassUMLParser .up.> SourceStringReader
 PlantClassUMLParser .up.> MethodAdapter
 PlantClassUMLParser --> SourceStringReaderAdapter
 PlantClassUMLParser --> UMLTextWriter
-PlantClassUMLParser --|> UMLParser
-UMLParser ..> ClassAdapter
+PlantClassUMLParser ..> ClassAdapter
 Linter --> ProjectDataManager
 Linter -up-> Check
 Linter -up-> ClassAdapter
-Linter --> UMLParser
+Linter --> PlantClassUMLParser
 Linter ..> PresentationInformation
 Linter ..> UserOptions
 Linter .up.> ClassAdapter
@@ -389,6 +411,7 @@ ProjectDataManager ..> ClassAdapter
 Check ..> MethodAdapter
 Check ..> FieldAdapter
 StrategyPatternCheck --|> Check
+RedundantInterfaceCheck --|> Check
 Check --> CheckData
 'SingletonPatternCheck ..> MethodAdapter
 'SingletonPatternCheck ..> FieldAdapter
