@@ -65,11 +65,13 @@ public class GUI extends UI  {
 
     public void setChecksFromConfig() {
         if(config.get("checks") instanceof LinkedHashMap) {
-            LinkedHashMap<String, String> checkMap = (LinkedHashMap<String, String>) config.get("checks");
+            LinkedHashMap<String, Boolean> checkMap = (LinkedHashMap<String, Boolean>) config.get("checks");
             for (String check : checkMap.keySet()) {
-                for (JCheckBox checkBox : checkBoxes) {
-                    if (checkBox.getText().equals(check))
-                        checkBox.setSelected(true);
+                if(checkMap.get(check)) {
+                    for (JCheckBox checkBox : checkBoxes) {
+                        if (checkBox.getText().equals(check))
+                            checkBox.setSelected(true);
+                    }
                 }
             }
         }
@@ -123,9 +125,9 @@ public class GUI extends UI  {
 
     public JPanel createButtonPanel() {
         JPanel panel = new JPanel(new GridLayout(0, 2, 5, 5));
-        selectAll = new JButton("Select all checks");
+        selectAll = new JButton("Select All Checks");
         selectAll.addActionListener(getSelectAllListener());
-        confirmChecks = new JButton("Confirm selected checks");
+        confirmChecks = new JButton("Confirm Selected Checks");
         confirmChecks.addActionListener(getConfirmChecksListener());
         panel.add(selectAll);
         panel.add(confirmChecks);
@@ -164,12 +166,14 @@ public class GUI extends UI  {
             }
         }
         int response = getOptionsDialog("Would you like to generate output in a text file?", options);
-        if(response == 0)
-            userOptions.saveOutput("");
+        if(response == 0) {
+            String dir = JOptionPane.showInputDialog(null, "What is the full path to the directory you would like the report to be placed in?");
+            userOptions.saveOutput(dir);
+        }
 
         response = getOptionsDialog("Would you like to generate a uml?", options);
         if(response == 0) {
-            String dir = JOptionPane.showInputDialog(null, "What is the full path to the directory you would like the uml image and text to be outputted to?");
+            String dir = JOptionPane.showInputDialog(null, "What is the full path to the directory you would like the uml image and text to be placed in?");
             userOptions.doUMLParse(dir);
         }
         return userOptions;
@@ -220,9 +224,13 @@ public class GUI extends UI  {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    UserOptions userOptions = getUserOptions(null);
-                    List<PresentationInformation> results = linter.runChecks(availableChecks, directoryField.getText(), userOptions);
-                    displayResults(results);
+                    if(availableChecks.size() > 0) {
+                        UserOptions userOptions = getUserOptions(null);
+                        List<PresentationInformation> results = linter.runChecks(availableChecks, directoryField.getText(), userOptions);
+                        displayResults(results);
+                    }else
+                        JOptionPane.showMessageDialog(null, "ERROR: Please ensure that you have selected checks and pushed the 'Confirm Selected Checks' button!");
+
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
