@@ -1,1 +1,18 @@
+PoorNamingConvention failed!
+NoFinalizerCheck passed!
+EqualsHashCode passed!
+InformationHidingViolation failed!
+      Getter/Setter detected in ASMPracticeCode/RedundantInterface/TestInterfaceD, but ignored since it is a data class
+HollywoodPrinciple passed!
+SingleResponsibilityPrinciple passed!
+      The median amount of public methods is 1. We will consider over 1 public methods a violation
+SingletonPattern failed!
+StrategyPattern passed!
+      Strategy Abstraction Class: ASMPracticeCode/RedundantInterface/TestInterfaceD, Concrete Strategy Classes: ASMPracticeCode/RedundantInterface/RedundantInterface
+      Strategy Abstraction Class: ASMPracticeCode/RedundantInterface/ValidClass, Concrete Strategy Classes: ASMPracticeCode/RedundantInterface/RedundantInterface
+DecoratorPattern failed!
+RedundantInterface failed!
+      Class ASMPracticeCode/RedundantInterface/RedundantInterface both inherits and implements method "void methodE()" from class ASMPracticeCode/RedundantInterface/ValidClass and interface ASMPracticeCode/RedundantInterface/TestInterfaceD
 DataClass passed!
+      ASMPracticeCode/RedundantInterface/TestInterfaceD is a Data Class
+ObserverPattern failed!
